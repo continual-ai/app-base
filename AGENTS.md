@@ -3,8 +3,9 @@
 All Apps live in `apps/<app-key>/` (`/project/apps/<app-key>` in the sandbox).
 The starter is `apps/app/`. Build directly in it; before first registration, choose the stable
 key and use `git mv apps/app apps/<app-key>` if changing `app`. Update that package's
-`name`, `continual.key`, and `continual.name` together, then run `pnpm install` at the root
-to update the lockfile. Preserve the key for an already registered App.
+`name`, `continual.key`, and `continual.name` together before changing dependencies.
+If adding a dependency, `pnpm --dir apps/<app-key> add <package>` installs and updates the
+workspace lockfile; otherwise run `pnpm install` at the root. Do not immediately do both. Preserve the key for an already registered App.
 Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
 
 ## Commands
@@ -69,6 +70,8 @@ Do not add a dashboard, generic CRUD framework, or business model by default.
 
 Use TanStack server routes or server functions. Browser code calls relative app
 URLs; serve from `/` in both development and production.
+Use the SDK caller identity in managed previews as well as production; never replace it with
+a shared development owner. Verify data-backed flows through the authenticated stable URL.
 Keep `GET /api/health` dependency-free and preserve the root route's
 `initDesignMode()` and `initTelemetry()` browser initialization.
 
