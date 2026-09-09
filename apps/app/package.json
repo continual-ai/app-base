@@ -13,8 +13,8 @@
     "build": "vite build",
     "preview": "pnpm run build && vite preview --host 0.0.0.0 --port 9999 --strictPort",
     "deploy": "pnpm run check && pnpm run build && pnpm exec continual deploy",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format": "prettier --ignore-path ../../.prettierignore --write .",
+    "format:check": "prettier --ignore-path ../../.prettierignore --check ."
   },
   "dependencies": {
     "@fontsource-variable/geist": "5.2.9",
