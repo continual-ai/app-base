@@ -7,3 +7,4 @@ node_modules/
 .continual/
 dist/
 src/routeTree.gen.ts
+.playwright-cli/

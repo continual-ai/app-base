@@ -9,10 +9,27 @@ nested directory. Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
 - Use Node.js 24+ and the pinned pnpm version. Install at the repository root.
 - Read `package.json` for commands. Use `pnpm dev` (0.0.0.0:9999), `pnpm check`,
   `pnpm build`, and `pnpm preview`. Override a port with `pnpm dev --port 3000`.
-- Run `pnpm check` and `pnpm build` after routing, dependency, or build changes.
+- For ordinary page edits, run `make format` and `pnpm check`, then verify the dev
+  preview. `pnpm check` already includes typechecking; do not run it twice.
+- Run `pnpm build` for publication or changes to dependencies, server behavior,
+  routing configuration, or build wiring. A static asset edit does not require a rebuild
+  to verify it in the dev server.
 - `pnpm check` regenerates `src/routeTree.gen.ts` before TypeScript; never edit it.
 - Run `make format` before pushing or creating/updating a PR.
 - For publication, `pnpm run deploy` checks and builds before invoking the CLI.
+
+## File map
+
+| Concern                                    | File                                             |
+| ------------------------------------------ | ------------------------------------------------ |
+| Home page                                  | `src/routes/index.tsx`                           |
+| Document, metadata, favicon, preview hooks | `src/routes/__root.tsx`                          |
+| Liveness endpoint                          | `src/routes/api.health.ts`                       |
+| Router                                     | `src/router.tsx`                                 |
+| Global styles and semantic tokens          | `src/styles/global.css`, `src/styles/tokens.css` |
+| UI primitives and class helper             | `src/components/ui/`, `src/lib/utils.ts`         |
+| Static assets                              | `public/`                                        |
+| Framework and build configuration          | `vite.config.ts`                                 |
 
 ## UI
 
