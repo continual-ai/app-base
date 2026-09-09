@@ -4,18 +4,6 @@ This repository is one runnable TanStack Start app at its root. Build the reques
 product directly in `src/`; do not create another scaffold or copy the app into a
 nested directory. Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
 
-## Sources of truth
-
-Read the platform-provided `app-development` skill for the development workflow,
-including App identity, sandbox server management, preview registration, browser
-verification, committing/pushing, and publication. Read `continual-platform-sdk-cli`
-for SDK usage, authentication, deployment contracts, and its database reference
-before adding database access or changing shared Branch data.
-
-Those skills own the shared platform guidance; this file owns repository-specific
-commands and conventions. The platform supplies these skills; do not vendor copies
-into this repository.
-
 ## Commands
 
 - Use Node.js 24+ and the pinned pnpm version. Install at the repository root.
