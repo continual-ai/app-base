@@ -1,24 +1,26 @@
 # Working in App Base
 
-This repository is one runnable TanStack Start app at its root. Build the requested
-product directly in `src/`; do not create another scaffold or copy the app into a
-nested directory. Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
+All Apps live in `apps/<app-key>/` (`/project/apps/<app-key>` in the sandbox).
+The starter is `apps/app/`. Build directly in it; before first registration, choose the stable
+key and use `git mv apps/app apps/<app-key>` if changing `app`. Update that package's
+`name`, `continual.key`, and `continual.name` together, then run `pnpm install` at the root
+to update the lockfile. Preserve the key for an already registered App.
+Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
 
 ## Commands
 
 - Use Node.js 24+ and the pinned pnpm version. Install at the repository root.
-- Read `package.json` for commands. Use `pnpm dev` (0.0.0.0:9999), `pnpm check`,
-  `pnpm build`, and `pnpm preview`. Override a port with `pnpm dev --port 3000`.
-- For ordinary page edits, run `make format` and `pnpm check`, then verify the dev
-  preview. `pnpm check` already includes typechecking; do not run it twice.
-- Run `pnpm build` for publication or changes to dependencies, server behavior,
-  routing configuration, or build wiring. A static asset edit does not require a rebuild
-  to verify it in the dev server.
-- `pnpm check` regenerates `src/routeTree.gen.ts` before TypeScript; never edit it.
+- Root `make format`, `pnpm check`, and `pnpm build` cover the workspace.
+- For one App, use `pnpm --dir apps/<app-key> dev`, `check`, or `build`.
+- `pnpm --dir apps/<app-key> run deploy` checks, builds, and invokes the CLI.
+- For ordinary page edits, format and check once, then verify the dev preview. Build for
+  publication or changes to dependencies, server behavior, routing configuration, or build wiring.
+- Typechecking generates `src/routeTree.gen.ts`; never edit it.
 - Run `make format` before pushing or creating/updating a PR.
-- For publication, `pnpm run deploy` checks and builds before invoking the CLI.
 
 ## File map
+
+Paths below are relative to `apps/<app-key>/`.
 
 | Concern                                    | File                                             |
 | ------------------------------------------ | ------------------------------------------------ |
@@ -26,7 +28,7 @@ nested directory. Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
 | Document, metadata, favicon, preview hooks | `src/routes/__root.tsx`                          |
 | Liveness endpoint                          | `src/routes/api.health.ts`                       |
 | Router                                     | `src/router.tsx`                                 |
-| Global styles and semantic tokens          | `src/styles/global.css`, `src/styles/tokens.css` |
+| Global styles and tokens                   | `src/styles/global.css`, `src/styles/tokens.css` |
 | UI primitives and class helper             | `src/components/ui/`, `src/lib/utils.ts`         |
 | Static assets                              | `public/`                                        |
 | Framework and build configuration          | `vite.config.ts`                                 |

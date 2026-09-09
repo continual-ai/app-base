@@ -1,7 +1,7 @@
 # App Base
 
 A minimal, ready-to-edit TanStack Start app for Continual. Use this repository as a
-GitHub template, clone your copy, and build your product directly in `src/`.
+GitHub template, clone your copy, and build your product in `apps/<app-key>/src/`.
 
 ## Start
 
@@ -9,25 +9,30 @@ Use Node.js 24+ and pnpm 11.3.0.
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm dev
+pnpm --dir apps/app dev
 ```
 
-Open http://localhost:9999. Replace `src/routes/index.tsx` with your app.
-Before its first preview registration or deployment, set `continual.key` and
-`continual.name` in `package.json` to the app's permanent key and display name.
+Open http://localhost:9999. Replace `apps/app/src/routes/index.tsx` with your app.
+Before first registration, choose the permanent key. Rename `apps/app` with
+`git mv apps/app apps/<app-key>`, update its package name and `continual.key` /
+`continual.name`, and run `pnpm install` at the root to update the workspace lockfile.
 Keep the key stable after registration. The package name is independent of that key.
+
+All Apps must live in `apps/<app-key>/`; the repository root owns the pnpm workspace
+and lockfile. App source, assets, migrations, configuration, and build output stay inside
+the App directory. Additional Apps use another directory under `apps/`.
 
 ## Commands
 
-| Command                | Behavior                                                    |
-| ---------------------- | ----------------------------------------------------------- |
-| `pnpm dev`             | Start the development server on port 9999                   |
-| `pnpm dev --port 3000` | Use a different port                                        |
-| `pnpm check`           | Check formatting, generate routes, and check TypeScript     |
-| `pnpm build`           | Build the Nitro Cloudflare artifact in `.output/`           |
-| `pnpm preview`         | Build and serve the production artifact locally             |
-| `pnpm run deploy`      | Check, build, then publish through the pinned Continual CLI |
-| `pnpm format`          | Format source and configuration                             |
+| Command                                     | Behavior                                                    |
+| ------------------------------------------- | ----------------------------------------------------------- |
+| `pnpm --dir apps/<app-key> dev`             | Start the development server on port 9999                   |
+| `pnpm --dir apps/<app-key> dev --port 3000` | Use a different port                                        |
+| `pnpm check`                                | Check formatting, generate routes, and check TypeScript     |
+| `pnpm build`                                | Build the Nitro Cloudflare artifact in `.output/`           |
+| `pnpm --dir apps/<app-key> preview`         | Build and serve the production artifact locally             |
+| `pnpm --dir apps/<app-key> run deploy`      | Check, build, then publish through the pinned Continual CLI |
+| `pnpm format`                               | Format source and configuration                             |
 
 Use `pnpm run deploy` explicitly; `pnpm deploy` is also a pnpm workspace command.
 Generated routes and build artifacts are ignored. Route generation runs before
