@@ -11,6 +11,8 @@ Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
 
 - Use Node.js 24+ and the pinned pnpm version. Install at the repository root.
 - Root `make format`, `pnpm check`, and `pnpm build` cover the workspace.
+- App formatting scripts explicitly load `../../.prettierignore`; preserve that path so
+  checks after a build exclude generated output.
 - For one App, use `pnpm --dir apps/<app-key> dev`, `check`, or `build`.
 - `pnpm --dir apps/<app-key> run deploy` checks, builds, and invokes the CLI.
 - For ordinary page edits, format and check once, then verify the dev preview. Build for
