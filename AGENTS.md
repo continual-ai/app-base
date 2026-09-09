@@ -41,6 +41,26 @@ Replace the neutral home page with the requested product. Choose navigation,
 layout, data model, and workflows to fit its users. Add code only as needed.
 Use the source-owned primitives in `src/components/ui/`, `cn` in
 `src/lib/utils.ts`, and semantic tokens in `src/styles/tokens.css`.
+The primitive APIs below cover normal usage; read their source only when customizing behavior.
+All support `className` and their element's normal props.
+
+| Import path under `@/components/ui/` | Exports and common props                                                   |
+| ------------------------------------ | -------------------------------------------------------------------------- |
+| `button`                             | `Button`: `variant="default                                                | outline                                                                                        | secondary | ghost | destructive | link"`, `size="default | xs   | sm                                  | lg  | icon | icon-xs | icon-sm | icon-lg"`, `asChild` for links |
+| `badge`                              | `Badge`: same variants as Button, `asChild`                                |
+| `card`                               | `Card` (`size="default                                                     | sm"`), `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, `CardFooter` |
+| `input`, `textarea`, `label`         | `Input`, `Textarea`, `Label`; connect labels with `htmlFor` and input `id` |
+| `separator`                          | `Separator` from Radix; horizontal by default                              |
+| `icon`                               | `Icon`: `name="search                                                      | plus                                                                                           | close     | check | arrowRight  | chevronDown            | star | mapPin"`; decorative, no dependency |
+
+```tsx
+<Button type="button" variant="outline"><Icon name="plus" />Add item</Button>
+<Button type="button" size="icon" aria-label="Close"><Icon name="close" /></Button>
+```
+
+Reuse these icons when they fit; add only the missing icons the product needs.
+Use `bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, and
+`bg-primary text-primary-foreground` with the existing semantic tokens.
 Add further primitives when needed using the checked-in shadcn configuration.
 Preserve accessible labels, keyboard interaction, visible focus, and contrast.
 Do not add a dashboard, generic CRUD framework, or business model by default.
@@ -52,8 +72,9 @@ URLs; serve from `/` in both development and production.
 Keep `GET /api/health` dependency-free and preserve the root route's
 `initDesignMode()` and `initTelemetry()` browser initialization.
 
-Preserve safe SDK error messages in a stable `{ error: string }` response;
-never return credentials or stack traces.
+Use a stable `{ error: string }` response. Return 400 for malformed JSON and invalid
+request shapes. Show explicitly safe validation messages; use a friendly generic message
+for unexpected server/database failures. Never return raw exception messages or stack traces.
 
 ## Optional database
 
