@@ -5,4 +5,5 @@ allowBuilds:
   workerd: true
   msw: false
 minimumReleaseAgeExclude:
-  - "@continual/cli@0.5.11"
+  - "@continual/cli@0.5.13"
+  - "@continual/sdk@0.5.6"

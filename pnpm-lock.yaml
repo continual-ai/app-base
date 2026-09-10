@@ -15,8 +15,8 @@ importers:
   apps/app:
     dependencies:
       '@continual/sdk':
-        specifier: 0.5.5
-        version: 0.5.5
+        specifier: 0.5.6
+        version: 0.5.6
       '@fontsource-variable/geist':
         specifier: 5.2.9
         version: 5.2.9
@@ -55,8 +55,8 @@ importers:
         version: 1.4.0
     devDependencies:
       '@continual/cli':
-        specifier: 0.5.11
-        version: 0.5.11
+        specifier: 0.5.13
+        version: 0.5.13
       '@continual/tanstack-start':
         specifier: 0.1.3
         version: 0.1.3(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@tanstack/react-start@1.168.38(crossws@0.4.12(srvx@0.11.22))(esbuild@0.28.1)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(rolldown@1.2.7)(vite@8.2.2(@types/node@24.12.4)(esbuild@0.28.1)(jiti@2.7.0)))(chokidar@5.0.0)(dotenv@17.4.2)(jiti@2.7.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.2.2(@types/node@24.12.4)(esbuild@0.28.1)(jiti@2.7.0))
@@ -263,13 +263,13 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@continual/cli@0.5.11':
-    resolution: {integrity: sha512-IQDCjNONXwDBwVWK8gKzSO+3COqkbU/ZdRaq+sUpmPVGNbjx5HH2lGC8SzhKxPVBaRUgsZpZqo2RDyqBClDNeQ==}
+  '@continual/cli@0.5.13':
+    resolution: {integrity: sha512-tXzOD6tHohQk220Quc9b5oZroqFfYTybd/L0KST2C1iWzA6OYo0EHZsjs4ZDGbxbTJY2h2jRZqHcTYrhg0BtKA==}
     engines: {node: '>=24.0.0'}
     hasBin: true
 
-  '@continual/sdk@0.5.5':
-    resolution: {integrity: sha512-kXtFKjFRKUpLs7jc5cCvAQUpEUZFk+kAnbkitb2Uyb1ms7NE8nowE9e8L0Rt21M5PONlUStjGw2mHZVZbgE0XA==}
+  '@continual/sdk@0.5.6':
+    resolution: {integrity: sha512-shH0J+yCiDHmifh/0Ew6Hs1uepCEmyJ22+4FHJoCsJYqK+6EqzqLlkC5k+DGRu+HfKR1bkk7r/f4Hg5LEssOFQ==}
     engines: {node: '>=24.0.0'}
 
   '@continual/tanstack-start@0.1.3':
@@ -4183,9 +4183,9 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20260903.1':
     optional: true
 
-  '@continual/cli@0.5.11': {}
+  '@continual/cli@0.5.13': {}
 
-  '@continual/sdk@0.5.5':
+  '@continual/sdk@0.5.6':
     dependencies:
       zod: 3.25.76
       zod-to-json-schema: 3.25.2(zod@3.25.76)
