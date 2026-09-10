@@ -56,14 +56,14 @@ Use the source-owned primitives in `src/components/ui/`, `cn` in
 The primitive APIs below cover normal usage; read their source only when customizing behavior.
 All support `className` and their element's normal props.
 
-| Import path under `@/components/ui/` | Exports and common props                                                   |
-| ------------------------------------ | -------------------------------------------------------------------------- |
-| `button`                             | `Button`: `variant="default                                                | outline                                                                                        | secondary | ghost | destructive | link"`, `size="default | xs   | sm                                  | lg  | icon | icon-xs | icon-sm | icon-lg"`, `asChild` for links |
-| `badge`                              | `Badge`: same variants as Button, `asChild`                                |
-| `card`                               | `Card` (`size="default                                                     | sm"`), `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, `CardFooter` |
-| `input`, `textarea`, `label`         | `Input`, `Textarea`, `Label`; connect labels with `htmlFor` and input `id` |
-| `separator`                          | `Separator` from Radix; horizontal by default                              |
-| `icon`                               | `Icon`: `name="search                                                      | plus                                                                                           | close     | check | arrowRight  | chevronDown            | star | mapPin"`; decorative, no dependency |
+| Import path under `@/components/ui/` | Exports and common props                                                                                                                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `button`                             | `Button`: variants `default`, `outline`, `secondary`, `ghost`, `destructive`, `link`; sizes `default`, `xs`, `sm`, `lg`, `icon`, `icon-xs`, `icon-sm`, `icon-lg`; `asChild` for links |
+| `badge`                              | `Badge`: same variants as Button, `asChild`                                                                                                                                           |
+| `card`                               | `Card` (sizes `default`, `sm`), `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, `CardFooter`                                                               |
+| `input`, `textarea`, `label`         | `Input`, `Textarea`, `Label`; connect labels with `htmlFor` and input `id`                                                                                                            |
+| `separator`                          | `Separator` from Radix; horizontal by default                                                                                                                                         |
+| `icon`                               | `Icon`: names `search`, `plus`, `close`, `check`, `arrowRight`, `chevronDown`, `star`, `mapPin`; decorative, no dependency                                                            |
 
 ```tsx
 <Button type="button" variant="outline"><Icon name="plus" />Add item</Button>
@@ -155,8 +155,16 @@ also supported). Unexpected failures return a generic error without exception de
 
 Authentication is required for both interfaces, including MCP discovery. The template
 calls `createAppServerClient({ request }).auth.me()` once per request. Managed previews and
-published Apps use Continual's identity; there is no local shared-owner fallback. Without
-credentials, the UI and `/api/health` still work, while operation endpoints return 401.
+published Apps use Continual's identity; there is no local shared-owner fallback. The Continual
+preview panel automatically supplies the signed-in user's App session. This backend authentication
+requirement does not introduce another user login: do not add an App login screen or tell an
+already signed-in user to log in again. Diagnose identity, session, routing, or API failures instead.
+
+The preview tool's `authentication-required` status describes an anonymous health probe without
+browser cookies, not the user's login state. For testing in the separate sandbox browser, follow
+`browser-use` to establish that browser's session yourself with `continual.apps.authUrl()`.
+Without credentials, the UI and `/api/health` still work at the application layer, while operation
+endpoints return 401; a private App's front Worker also enforces access before forwarding requests.
 
 **Connect at your stable App URL:** `https://<app-hostname>/api/mcp`. Continual agent sessions
 can discover published App endpoints through the platform. Other MCP clients must supply
@@ -165,7 +173,8 @@ This template does not implement a standalone OAuth authorization server or acce
 bearer tokens. Customize `src/server/context.ts` when using another identity provider.
 
 Host validation is provided by Vite's configured `allowedHosts` in development and Continual's
-front Worker in production. The adapters also reject cross-origin browser requests. If you
+front Worker in production. The adapters compare browser Origin with the HTTPS host in the runtime assertion after
+`auth.me()` verifies it. They do not trust Host or X-Forwarded-Host as origin authority. If you
 host the server outside those environments, configure an explicit trusted Host allowlist at
 your ingress and replace the authentication adapter before exposing it. Do not forward
 untrusted `x-continual-*` headers to the SDK. The endpoint is stateless: tools are intended for
@@ -199,6 +208,17 @@ server is not a Cloudflare Worker. Never import Worker-only modules into an
 unconditional development path or bake environment values into the build.
 
 Fail clearly if the requested database route has no URL.
+
+### Applying migrations
+
+Shell calls do not retain a previous `cd`. Run SQL files with absolute App paths and stop on errors:
+
+```sh
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f /project/apps/<app-key>/migrations/001_create_tables.sql
+```
+
+Apply actual migration files in order before starting code that depends on them. If the App owns a
+migration script, use `pnpm --dir /project/apps/<app-key> run db:migrate`.
 
 ## Build and hosting
 
