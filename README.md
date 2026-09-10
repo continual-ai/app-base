@@ -159,6 +159,14 @@ uses the Branch database, then add its driver and versioned migrations.
 Continual supplies `DATABASE_URL` and optional `DATABASE_SCHEMA`; see
 `AGENTS.md` for server-side usage.
 
+## Browser tooling
+
+The App includes `playwright` as a pinned dev dependency, so scripts can use normal
+`import { chromium } from "playwright"` imports and `pnpm --dir apps/app exec playwright`.
+Keep its version aligned with the Continual sandbox base image. Managed sandboxes reuse
+preinstalled Chromium through `PLAYWRIGHT_BROWSERS_PATH`; no browser download is needed there.
+Outside the sandbox, install Chromium with `pnpm --dir apps/app exec playwright install chromium`.
+
 ## Maintenance
 
 Continual dependencies are pinned to published versions: CLI 0.5.11, SDK 0.5.5,
