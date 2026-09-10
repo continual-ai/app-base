@@ -79,6 +79,29 @@ Use a stable `{ error: string }` response. Return 400 for malformed JSON and inv
 request shapes. Show explicitly safe validation messages; use a friendly generic message
 for unexpected server/database failures. Never return raw exception messages or stack traces.
 
+## Shared backend operations and MCP
+
+Implement JSON business reads and writes with `defineOperation` in `src/server/operation.ts`
+and register them in `src/server/operations.ts`. Every registered operation is available as
+`POST /api/operations/<name>` and as an MCP tool at `/api/mcp`. Reuse the handler; do not
+maintain a second MCP implementation or register internal-only helpers.
+
+Use Zod JSON object input/output schemas, a useful description, and accurate MCP annotations.
+`context.actor` is the caller verified by Continual; `context.continual` is the request-scoped
+SDK client. Enforce business authorization in the handler, use the actor for attribution,
+and own any needed database transactions there. MCP annotations are hints, not enforcement.
+Never substitute a development owner or accept a caller-supplied actor ID as authentication.
+
+Throw `OperationError` only for safe user-facing failures (400/403/404/409). Other errors and
+invalid outputs receive a generic error. Keep raw request handlers for health, uploads,
+webhooks, and other non-operation endpoints. Keep all `src/server` imports out of browser
+code; browser consumers call relative URLs. Do not loosen Vite's host checks or the trusted
+Continual front-Worker boundary; see README for unmanaged hosting.
+
+Run `pnpm test`, `pnpm check`, and `pnpm build` when changing these adapters. Tests use the
+real MCP SDK client and Fetch handler. `RUN_E2E_TESTS=1` enables the opt-in development-App
+authentication test documented in README; never use production cookies or credentials.
+
 ## Optional database
 
 The base does not request database access or install a database driver.
