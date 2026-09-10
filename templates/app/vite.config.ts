@@ -14,6 +14,8 @@ export default defineConfig({
   vite: {
     server: {
       allowedHosts: [
+        ".continual.site",
+        ".continual.run",
         ".tensorlake.ai",
         ".e2b.app",
         ".proxy.daytona.work",
