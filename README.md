@@ -155,7 +155,8 @@ Server routes use `createAppServerClient({ request })` from
 credentials stay on the server.
 
 Database access is opt-in. Add `continual.database: true` only when the app
-uses the Branch database, then add its driver and versioned migrations.
+uses the Branch database, then add versioned migrations. The Neon driver
+(`@neondatabase/serverless`) is already included as a runtime dependency.
 Continual supplies `DATABASE_URL` and optional `DATABASE_SCHEMA`; see
 `AGENTS.md` for server-side usage.
 

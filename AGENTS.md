@@ -104,7 +104,9 @@ authentication test documented in README; never use production cookies or creden
 
 ## Optional database
 
-The base does not request database access or install a database driver.
+The base includes `@neondatabase/serverless` as a runtime dependency. Database access remains
+opt-in: set `continual.database: true` in the App package only when it uses the Branch database.
+Use the installed driver for server-side queries and add versioned migrations for App-owned tables.
 
 Read local server values from `process.env.DATABASE_URL` and optional
 `process.env.DATABASE_SCHEMA`. For published Cloudflare Workers, use runtime
