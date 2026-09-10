@@ -54,7 +54,7 @@ authentication UI, or sample data. Add features and dependencies when needed.
 
 The starter exposes **one shared implementation through HTTP and MCP**, using the official
 MCP TypeScript SDK. `src/server/operations.ts` contains a working `currentActor` operation.
-Its HTTP endpoint is `POST /api/operations/currentActor` with `{}` as the JSON body; its MCP
+Its HTTP endpoint is `POST /api/v1/currentActor` with `{}` as the JSON body; its MCP
 tool name is `currentActor`, served at `/api/mcp`.
 
 Add operations to that registry (paths below are relative to `apps/<app-key>/`):
@@ -81,11 +81,11 @@ export const operations = {
 };
 ```
 
-The operation is now both `POST /api/operations/greet` and MCP tool `greet`. No extra route
+The operation is now both `POST /api/v1/greet` and MCP tool `greet`. No extra route
 or tool registration is needed. From browser code:
 
 ```ts
-const response = await fetch("/api/operations/greet", {
+const response = await fetch("/api/v1/greet", {
   method: "POST",
   headers: { "content-type": "application/json" },
   body: JSON.stringify({ greeting: "Hello" }),

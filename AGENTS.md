@@ -83,8 +83,14 @@ for unexpected server/database failures. Never return raw exception messages or 
 
 Implement JSON business reads and writes with `defineOperation` in `src/server/operation.ts`
 and register them in `src/server/operations.ts`. Every registered operation is available as
-`POST /api/operations/<name>` and as an MCP tool at `/api/mcp`. Reuse the handler; do not
+`POST /api/v1/<name>` and as an MCP tool at `/api/mcp`. Reuse the handler; do not
 maintain a second MCP implementation or register internal-only helpers.
+
+`/api/mcp` is already wired: `src/routes/api.mcp.ts` delegates to `appApi.mcp`, and
+`src/server/app-api.ts` binds the shared registry to the authenticated context. Adding an entry
+in `src/server/operations.ts` exposes it through both transports; no new MCP route or server is
+needed. Arbitrary server routes are not discovered automatically. See README's **Backend
+operations and MCP** section for a complete registration example.
 
 Use Zod JSON object input/output schemas, a useful description, and accurate MCP annotations.
 `context.actor` is the caller verified by Continual; `context.continual` is the request-scoped

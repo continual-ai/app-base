@@ -93,7 +93,7 @@ function fixture() {
 }
 
 function request(name: string, input: unknown = {}, actor = "alice") {
-  return new Request(`http://localhost/api/operations/${name}`, {
+  return new Request(`http://localhost/api/v1/${name}`, {
     method: "POST",
     headers: { "content-type": "application/json", "x-test-actor": actor },
     body: JSON.stringify(input),
@@ -267,7 +267,7 @@ describe("shared operations", () => {
 
   it("handles malformed JSON and unknown/prototype operation names", async () => {
     const { api } = fixture();
-    const req = new Request("http://localhost/api/operations/write", {
+    const req = new Request("http://localhost/api/v1/write", {
       method: "POST",
       headers: { "x-test-actor": "alice" },
       body: "{",

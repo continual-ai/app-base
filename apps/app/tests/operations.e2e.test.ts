@@ -16,15 +16,12 @@ describe.skipIf(!process.env.RUN_E2E_TESTS)(
           "Set APP_E2E_URL and APP_E2E_COOKIE for a development App.",
         );
       const headers = { cookie, "content-type": "application/json" };
-      const http = await fetch(
-        new URL("/api/operations/currentActor", origin),
-        {
-          method: "POST",
-          headers,
-          body: "{}",
-          redirect: "error",
-        },
-      );
+      const http = await fetch(new URL("/api/v1/currentActor", origin), {
+        method: "POST",
+        headers,
+        body: "{}",
+        redirect: "error",
+      });
       expect(http.status).toBe(200);
       const result = await http.json();
       expect(result.actor.actorId).toBeTruthy();
