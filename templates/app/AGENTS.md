@@ -1,8 +1,13 @@
 # App development
 
-This file applies to this App. Keep it current with the App's purpose, implementation,
-commands, and data/access rules as the product develops. Follow the root AGENTS.md for
-project-wide context and conventions. Paths below are relative to this directory.
+Read the root `AGENTS.md` first for project context and shared conventions. This file supplies
+starter implementation guidance; paths below are relative to this directory.
+
+After creating `apps/<app-key>/`, once the App's purpose and scope are established, rewrite the
+copied `AGENTS.md` as that App's guide: behavior, implementation, commands, data, and access rules.
+Replace generic starter prose; preserve applicable technical constraints, including shared HTTP/MCP
+registration, identity, database bindings, and build commands. Keep the guide current as the App
+evolves. Rewrite only the App-local copy; keep `templates/app/AGENTS.md` reusable for future Apps.
 
 Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
 

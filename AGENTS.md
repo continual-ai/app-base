@@ -1,15 +1,17 @@
 # Project guide
 
-Keep this file about the actual project. As requirements become known, record its purpose,
-users, existing Apps and paths, shared conventions, and cross-App workflows here. Derive these
-from the user and repository; do not invent project requirements. Keep implementation details
-in each App's `AGENTS.md` and update the App list when adding or removing an App.
+This is starter guidance. Once the project's purpose and scope are established, rewrite this
+file as the actual project guide: purpose, users, existing Apps and paths, shared conventions,
+and cross-App workflows. Replace generic starter prose rather than appending another guide.
+Preserve relevant workspace commands and constraints, and derive details from the user and
+repository. Keep implementation guidance in each App's `AGENTS.md`. Keep this guide current
+when requirements change or Apps are added or removed.
 
 ## Workspace
 
 - Runnable Apps live in `apps/<app-key>/`. Read the target App's `AGENTS.md` before editing it.
 - Edit existing Apps in place; preserve their keys, identity, framework, and data.
-- For a new App, run `pnpm create-app <app-key> "Display name"`. It copies the reusable
+- For a new App, first read `templates/app/AGENTS.md`, then run `pnpm create-app <app-key> "Display name"`. It copies the reusable
   `templates/app/` starter, including its `AGENTS.md`, and refuses existing destinations.
 - Keep the template available for future Apps. Do not change it when implementing an individual
   App, rename an existing App to create another one, or generate a separate framework scaffold.
