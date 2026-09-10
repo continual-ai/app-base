@@ -13,7 +13,9 @@ jobs:
         with:
           node-version: 24
       - uses: pnpm/action-setup@v4
+      - run: mkdir -p apps && cp -R templates/app apps/app
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+      - run: pnpm test
       - run: pnpm build
       - run: pnpm -r run check

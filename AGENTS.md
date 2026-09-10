@@ -1,101 +1,53 @@
-# Working in App Base
+# Project guide
 
-All Apps live in `apps/<app-key>/` (`/project/apps/<app-key>` in the sandbox).
-The starter is `apps/app/`. Build directly in it; before first registration, choose the stable
-key and use `git mv apps/app apps/<app-key>` if changing `app`. Update that package's
-`name`, `continual.key`, and `continual.name` together before changing dependencies.
-If adding a dependency, `pnpm --dir apps/<app-key> add <package>` installs and updates the
-workspace lockfile; otherwise run `pnpm install` at the root. Do not immediately do both. Preserve the key for an already registered App.
-Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
+This is starter guidance. Once the project's purpose and scope are established, rewrite this
+file as the actual project guide: purpose, users, existing Apps and paths, shared conventions,
+and cross-App workflows. Replace generic starter prose rather than appending another guide.
+Preserve relevant workspace commands and constraints, and derive details from the user and
+repository. Keep implementation guidance in each App's `AGENTS.md`. Keep this guide current
+when requirements change or Apps are added or removed.
 
-## Commands
+A minimal TanStack Start repository that can be used as a GitHub template or cloned to start a
+project. README files are optional: add one when it would help the project's users or maintainers.
+Keep necessary agent guidance here or in the App-local `AGENTS.md`, not dependent on a README.
 
-- Use Node.js 24+ and the pinned pnpm version. Install at the repository root.
-- Root `make format`, `pnpm check`, and `pnpm build` cover the workspace.
-- App formatting scripts explicitly load `../../.prettierignore`; preserve that path so
-  checks after a build exclude generated output.
-- For one App, use `pnpm --dir apps/<app-key> dev`, `check`, or `build`.
-- `pnpm --dir apps/<app-key> run deploy` checks, builds, and invokes the CLI.
-- For ordinary page edits, format and check once, then verify the dev preview. Build for
-  publication or changes to dependencies, server behavior, routing configuration, or build wiring.
-- Typechecking generates `src/routeTree.gen.ts`; never edit it.
-- Run `make format` before pushing or creating/updating a PR.
+## Workspace
 
-## File map
+- Runnable Apps live in `apps/<app-key>/`. Read the target App's `AGENTS.md` before editing it.
+- Edit existing Apps in place; preserve their keys, identity, framework, and data.
+- For a new App, read `templates/app/AGENTS.md`, choose an App key and display name based on
+  the user's request, then confirm `apps/<app-key>/` does not already exist before copying the template.
+  Then run `mkdir -p apps` and `cp -R templates/app apps/<app-key>`.
+  In the copied `package.json`, set `name` and `continual.key` to the chosen key and
+  `continual.name` to the display name before installing dependencies. Never copy over an existing
+  App. Keep the source template free of dependencies, generated files, and secrets.
+- Keep the template available for future Apps. Do not change it when implementing an individual
+  App, rename an existing App to create another one, or generate a separate framework scaffold.
 
-Paths below are relative to `apps/<app-key>/`.
+## Shared commands
 
-| Concern                                    | File                                             |
-| ------------------------------------------ | ------------------------------------------------ |
-| Home page                                  | `src/routes/index.tsx`                           |
-| Document, metadata, favicon, preview hooks | `src/routes/__root.tsx`                          |
-| Liveness endpoint                          | `src/routes/api.health.ts`                       |
-| Router                                     | `src/router.tsx`                                 |
-| Global styles and tokens                   | `src/styles/global.css`, `src/styles/tokens.css` |
-| UI primitives and class helper             | `src/components/ui/`, `src/lib/utils.ts`         |
-| Static assets                              | `public/`                                        |
-| Framework and build configuration          | `vite.config.ts`                                 |
+Use Node.js 24+ and the pinned pnpm version. The root owns the workspace and lockfile.
+After creating an App, run `pnpm install`. If adding dependencies at the same time, use
+`pnpm --dir apps/<app-key> add <package>` instead; it also updates the lockfile. Do not do both
+without intervening manifest changes.
 
-## UI
+Root `make format`, `pnpm check`, `pnpm test`, and `pnpm build` cover the workspace.
+For one App, run its scripts with `pnpm --dir apps/<app-key>`.
+Run `make format` before pushing or creating/updating a PR.
 
-Replace the neutral home page with the requested product. Choose navigation,
-layout, data model, and workflows to fit its users. Add code only as needed.
-Use the source-owned primitives in `src/components/ui/`, `cn` in
-`src/lib/utils.ts`, and semantic tokens in `src/styles/tokens.css`.
-The primitive APIs below cover normal usage; read their source only when customizing behavior.
-All support `className` and their element's normal props.
+The committed lockfile covers the initial `app` key; other keys require updating it during
+installation. CI copies the template into `apps/app/` before frozen-lockfile installation, checks,
+tests, and production build. The template itself is not a runnable or registered App.
+`pnpm check` checks formatting and TypeScript, and `pnpm build` emits each App's Nitro Cloudflare
+artifact in `.output/`. `pnpm format` formats source and configuration.
 
-| Import path under `@/components/ui/` | Exports and common props                                                   |
-| ------------------------------------ | -------------------------------------------------------------------------- |
-| `button`                             | `Button`: `variant="default                                                | outline                                                                                        | secondary | ghost | destructive | link"`, `size="default | xs   | sm                                  | lg  | icon | icon-xs | icon-sm | icon-lg"`, `asChild` for links |
-| `badge`                              | `Badge`: same variants as Button, `asChild`                                |
-| `card`                               | `Card` (`size="default                                                     | sm"`), `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, `CardFooter` |
-| `input`, `textarea`, `label`         | `Input`, `Textarea`, `Label`; connect labels with `htmlFor` and input `id` |
-| `separator`                          | `Separator` from Radix; horizontal by default                              |
-| `icon`                               | `Icon`: `name="search                                                      | plus                                                                                           | close     | check | arrowRight  | chevronDown            | star | mapPin"`; decorative, no dependency |
+## Template maintenance
 
-```tsx
-<Button type="button" variant="outline"><Icon name="plus" />Add item</Button>
-<Button type="button" size="icon" aria-label="Close"><Icon name="close" /></Button>
-```
+Continual dependencies are pinned in the App package manifest. Update the manifest and lockfile
+together, then verify development, route generation, checks, and the production artifact. CI runs
+without platform credentials. The CLI and SDK versions in `templates/app/package.json` are the
+source of truth.
 
-Reuse these icons when they fit; add only the missing icons the product needs.
-Use `bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, and
-`bg-primary text-primary-foreground` with the existing semantic tokens.
-Add further primitives when needed using the checked-in shadcn configuration.
-Preserve accessible labels, keyboard interaction, visible focus, and contrast.
-Do not add a dashboard, generic CRUD framework, or business model by default.
-
-## Server boundary
-
-Use TanStack server routes or server functions. Browser code calls relative app
-URLs; serve from `/` in both development and production.
-Use the SDK caller identity in managed previews as well as production; never replace it with
-a shared development owner. Verify data-backed flows through the authenticated stable URL.
-Keep `GET /api/health` dependency-free and preserve the root route's
-`initDesignMode()` and `initTelemetry()` browser initialization.
-
-Use a stable `{ error: string }` response. Return 400 for malformed JSON and invalid
-request shapes. Show explicitly safe validation messages; use a friendly generic message
-for unexpected server/database failures. Never return raw exception messages or stack traces.
-
-## Optional database
-
-The base does not request database access or install a database driver.
-
-Read local server values from `process.env.DATABASE_URL` and optional
-`process.env.DATABASE_SCHEMA`. For published Cloudflare Workers, use runtime
-bindings from `cloudflare:workers`; keep that import in the production server
-path and add binding types when introducing it. The adapter's native development
-server is not a Cloudflare Worker. Never import Worker-only modules into an
-unconditional development path or bake environment values into the build.
-
-Fail clearly if the requested database route has no URL.
-
-## Build and hosting
-
-The pinned `@continual/tanstack-start/vite` adapter owns framework integration
-and emits Nitro `.output/`. Do not add a Wrangler configuration, a dry-run bundle,
-or a direct provider deployment command. Keep controlled sandbox preview hosts in
-`vite.config.ts`; extend with `CONTINUAL_ALLOWED_DEV_HOSTS` if needed rather than
-setting `allowedHosts: true`.
+Based on the TanStack template in
+[continual-ai/app-templates](https://github.com/continual-ai/app-templates/tree/0885a3e47d150a5c6dfa2abcd34056c60c2925e2/templates/tanstack-start-app).
+The build convention follows [Company OS](https://github.com/continual-ai/company-os).
