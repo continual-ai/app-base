@@ -11,8 +11,9 @@ when requirements change or Apps are added or removed.
 
 - Runnable Apps live in `apps/<app-key>/`. Read the target App's `AGENTS.md` before editing it.
 - Edit existing Apps in place; preserve their keys, identity, framework, and data.
-- For a new App, first read `templates/app/AGENTS.md`. Confirm `apps/<app-key>/` does not exist,
-  then run `mkdir -p apps` and `cp -R templates/app apps/<app-key>`.
+- For a new App, read `templates/app/AGENTS.md`, choose an App key and display name based on
+  the user's request, then confirm `apps/<app-key>/` does not already exist before copying the template.
+  Then run `mkdir -p apps` and `cp -R templates/app apps/<app-key>`.
   In the copied `package.json`, set `name` and `continual.key` to the chosen key and
   `continual.name` to the display name before installing dependencies. Never copy over an existing
   App. Keep the source template free of dependencies, generated files, and secrets.
