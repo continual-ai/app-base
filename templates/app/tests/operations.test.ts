@@ -4,7 +4,7 @@ import {
 } from "@modelcontextprotocol/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
-import { createOperationApi } from "../src/server/api";
+import { createOperationApi } from "@/server/api";
 import {
   defineOperation,
   OperationError,
@@ -256,14 +256,48 @@ describe("shared operations", () => {
     });
   });
 
-  it("rejects cross-origin requests before authentication", async () => {
+  it("rejects cross-origin requests before invoking operations", async () => {
     const { api, authenticate } = fixture();
     const req = request("write", { value: "bad" });
     req.headers.set("origin", "https://other.example");
     expect((await api.http(req, "write")).status).toBe(403);
     expect((await api.mcp(req)).status).toBe(403);
-    expect(authenticate).not.toHaveBeenCalled();
+    expect(authenticate).toHaveBeenCalled();
   });
+
+  it("accepts the authenticated public origin behind a proxy", async () => {
+    const { write } = fixture();
+    const api = createOperationApi(
+      {
+        write: defineOperation({
+          description: "Write",
+          input: z.object({ value: z.string() }),
+          output: z.object({ value: z.string() }),
+          handler: write,
+        }),
+      },
+      async () => ({ ...context(), origin: "https://app.example" }),
+    );
+    const req = request("write", { value: "saved" });
+    req.headers.set("origin", "https://app.example");
+    expect((await api.http(req, "write")).status).toBe(200);
+    expect(write).toHaveBeenCalledOnce();
+  });
+
+  it.each(["https://evil.example", "http://app.example", "null"])(
+    "rejects %s even when forwarded headers match it",
+    async (origin) => {
+      const { api, write } = fixture();
+      const req = request("write", { value: "bad" });
+      req.headers.set("origin", origin);
+      req.headers.set("host", "evil.example");
+      req.headers.set("x-forwarded-host", "evil.example");
+      req.headers.set("x-forwarded-proto", "https");
+      expect((await api.http(req, "write")).status).toBe(403);
+      expect((await api.mcp(req)).status).toBe(403);
+      expect(write).not.toHaveBeenCalled();
+    },
+  );
 
   it("handles malformed JSON and unknown/prototype operation names", async () => {
     const { api } = fixture();

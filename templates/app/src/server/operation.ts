@@ -3,6 +3,8 @@ import type { McpServer, ToolAnnotations } from "@modelcontextprotocol/server";
 import { z } from "zod";
 
 export interface OperationContext {
+  /** Public origin established by request authentication, never forwarded headers. */
+  origin?: string;
   actor: AuthenticatedActor;
   continual: AppServerClient;
 }

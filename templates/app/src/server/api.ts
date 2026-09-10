@@ -20,17 +20,20 @@ export function createOperationApi(
     request: Request,
     handle: (context: OperationContext) => Promise<Response>,
   ) {
-    // Browser requests must come from this app. MCP clients normally omit Origin.
-    // Vite's allowedHosts and Continual's front Worker enforce the host boundary.
-    const origin = request.headers.get("origin");
-    if (origin !== null && origin !== new URL(request.url).origin) {
-      return json({ error: "Cross-origin requests are not allowed." }, 403);
-    }
     let context: OperationContext;
     try {
       context = await authenticate(request);
     } catch {
       return json({ error: "Continual authentication is required." }, 401);
+    }
+    // Authentication resolves the public origin from verified runtime identity.
+    // Host/X-Forwarded-Host are not authority for browser origin checks.
+    const origin = request.headers.get("origin");
+    if (
+      origin !== null &&
+      origin !== (context.origin ?? new URL(request.url).origin)
+    ) {
+      return json({ error: "Cross-origin requests are not allowed." }, 403);
     }
     try {
       return await handle(context);
