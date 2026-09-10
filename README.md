@@ -7,19 +7,22 @@ GitHub template, clone your copy, and build your product in `apps/<app-key>/src/
 
 Use Node.js 24+ and pnpm 11.3.0.
 
+Choose an unused App key; do not copy over an existing App. For the initial `app` key:
+
 ```sh
-pnpm create-app app "My App"
+mkdir -p apps
+cp -R templates/app apps/app
 pnpm install
 pnpm --dir apps/app dev
 ```
 
-Open http://localhost:9999 and edit `apps/app/src/routes/index.tsx`.
-For another key, run `pnpm create-app <app-key> "Display name"`, then `pnpm install`
-to update the workspace lockfile. The committed lockfile covers the initial `app` key.
+For another key, copy to `apps/<app-key>/` and update the copied `package.json` fields:
+`name` and `continual.key` must use the chosen key, and `continual.name` is the display name.
+Do this before `pnpm install`, which updates the workspace lockfile. The committed lockfile
+covers the initial `app` key. Open http://localhost:9999 and edit the App's `src/routes/index.tsx`.
 
-`templates/app/` is the reusable starter, outside the runnable workspace. The creation command
-copies source into `apps/<app-key>/` and sets the package name and Continual identity. It refuses
-to overwrite existing directories. Keep the template for future Apps; edit existing Apps in place
+`templates/app/` is the reusable source-only starter, outside the runnable workspace. Keep it free
+of dependencies, generated files, and secrets. Keep it for future Apps; edit existing Apps in place
 and preserve their keys after registration. Do not rename or clone an existing App for a new one.
 The root `AGENTS.md` holds project context, the App list, and shared conventions; update it as
 the project develops. Each App inherits `templates/app/AGENTS.md` for its implementation guidance
