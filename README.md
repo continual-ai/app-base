@@ -21,7 +21,9 @@ to update the workspace lockfile. The committed lockfile covers the initial `app
 copies source into `apps/<app-key>/` and sets the package name and Continual identity. It refuses
 to overwrite existing directories. Keep the template for future Apps; edit existing Apps in place
 and preserve their keys after registration. Do not rename or clone an existing App for a new one.
-The repository root owns the workspace and lockfile. CI creates an App from the template before
+The root `AGENTS.md` holds project context, the App list, and shared conventions; update it as
+the project develops. Each App inherits `templates/app/AGENTS.md` for its implementation guidance
+and should adapt that copy to its own behavior. The repository root owns the workspace and lockfile. CI creates an App from the template before
 checking and building it, so the template is verified without registering it as an App.
 
 ## Commands
@@ -160,7 +162,7 @@ Database access is opt-in. Add `continual.database: true` only when the app
 uses the Branch database, then add versioned migrations. The Neon driver
 (`@neondatabase/serverless`) is already included as a runtime dependency.
 Continual supplies `DATABASE_URL` and optional `DATABASE_SCHEMA`; see
-`AGENTS.md` for server-side usage.
+the App's `AGENTS.md` for server-side usage.
 
 ## Browser tooling
 
