@@ -10,7 +10,8 @@
     "format:check": "prettier --check .",
     "check": "pnpm run format:check && pnpm -r run typecheck",
     "build": "pnpm -r run build",
-    "test": "pnpm -r run test"
+    "test": "node --test scripts/*.test.mjs && pnpm -r run test",
+    "create-app": "node scripts/create-app.mjs"
   },
   "devDependencies": {
     "prettier": "3.9.6"

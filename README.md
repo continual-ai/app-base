@@ -8,19 +8,21 @@ GitHub template, clone your copy, and build your product in `apps/<app-key>/src/
 Use Node.js 24+ and pnpm 11.3.0.
 
 ```sh
-pnpm install --frozen-lockfile
+pnpm create-app app "My App"
+pnpm install
 pnpm --dir apps/app dev
 ```
 
-Open http://localhost:9999. Replace `apps/app/src/routes/index.tsx` with your app.
-Before first registration, choose the permanent key. Rename `apps/app` with
-`git mv apps/app apps/<app-key>`, update its package name and `continual.key` /
-`continual.name`, and run `pnpm install` at the root to update the workspace lockfile.
-Keep the key stable after registration. The package name is independent of that key.
+Open http://localhost:9999 and edit `apps/app/src/routes/index.tsx`.
+For another key, run `pnpm create-app <app-key> "Display name"`, then `pnpm install`
+to update the workspace lockfile. The committed lockfile covers the initial `app` key.
 
-All Apps must live in `apps/<app-key>/`; the repository root owns the pnpm workspace
-and lockfile. App source, assets, migrations, configuration, and build output stay inside
-the App directory. Additional Apps use another directory under `apps/`.
+`templates/app/` is the reusable starter, outside the runnable workspace. The creation command
+copies source into `apps/<app-key>/` and sets the package name and Continual identity. It refuses
+to overwrite existing directories. Keep the template for future Apps; edit existing Apps in place
+and preserve their keys after registration. Do not rename or clone an existing App for a new one.
+The repository root owns the workspace and lockfile. CI creates an App from the template before
+checking and building it, so the template is verified without registering it as an App.
 
 ## Commands
 
@@ -163,10 +165,10 @@ Continual supplies `DATABASE_URL` and optional `DATABASE_SCHEMA`; see
 ## Browser tooling
 
 The App includes `playwright` as a pinned dev dependency, so scripts can use normal
-`import { chromium } from "playwright"` imports and `pnpm --dir apps/app exec playwright`.
+`import { chromium } from "playwright"` imports and `pnpm --dir apps/<app-key> exec playwright`.
 Keep its version aligned with the Continual sandbox base image. Managed sandboxes reuse
 preinstalled Chromium through `PLAYWRIGHT_BROWSERS_PATH`; no browser download is needed there.
-Outside the sandbox, install Chromium with `pnpm --dir apps/app exec playwright install chromium`.
+Outside the sandbox, install Chromium with `pnpm --dir apps/<app-key> exec playwright install chromium`.
 
 ## Maintenance
 

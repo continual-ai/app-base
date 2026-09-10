@@ -1,11 +1,15 @@
 # Working in App Base
 
 All Apps live in `apps/<app-key>/` (`/project/apps/<app-key>` in the sandbox).
-The starter is `apps/app/`. Build directly in it; before first registration, choose the stable
-key and use `git mv apps/app apps/<app-key>` if changing `app`. Update that package's
-`name`, `continual.key`, and `continual.name` together before changing dependencies.
-If adding a dependency, `pnpm --dir apps/<app-key> add <package>` installs and updates the
-workspace lockfile; otherwise run `pnpm install` at the root. Do not immediately do both. Preserve the key for an already registered App.
+For an existing App, edit its directory and preserve its key and identity. For a new App,
+run `pnpm create-app <app-key> "Display name"` to copy `templates/app/` into `apps/<app-key>/`
+and set its package name, `continual.key`, and `continual.name`. The command refuses to overwrite
+an existing directory. Never rename or copy an existing App to create another one.
+Keep `templates/app/` as the reusable starter; it is outside the runnable App workspace.
+Do not edit it while implementing an individual App or generate a separate framework scaffold.
+After creation, run `pnpm install` at the root to update the workspace lockfile. If adding a
+dependency at the same time, use `pnpm --dir apps/<app-key> add <package>` instead; it also
+updates the workspace lockfile. Do not immediately do both.
 Use TanStack Start/Router, React, TypeScript, and Tailwind v4.
 
 ## Commands
