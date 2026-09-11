@@ -43,10 +43,10 @@ artifact in `.output/`. `pnpm format` formats source and configuration.
 
 ## Template maintenance
 
-Continual dependencies are pinned in the App package manifest. Update the manifest and lockfile
-together, then verify development, route generation, checks, and the production artifact. CI runs
-without platform credentials. The CLI and SDK versions in `templates/app/package.json` are the
-source of truth.
+The CLI is pinned in the root `package.json`; App dependencies, including the SDK, are pinned in
+`templates/app/package.json`. Update the owning manifest and lockfile together, then verify
+development, route generation, checks, and the production artifact. CI runs without platform
+credentials. Apps use the workspace-root CLI through `pnpm exec continual`.
 
 Based on the TanStack template in
 [continual-ai/app-templates](https://github.com/continual-ai/app-templates/tree/0885a3e47d150a5c6dfa2abcd34056c60c2925e2/templates/tanstack-start-app).

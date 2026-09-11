@@ -36,7 +36,6 @@
     "zod": "4.5.4"
   },
   "devDependencies": {
-    "@continual/cli": "0.5.13",
     "@continual/tanstack-start": "0.1.3",
     "@modelcontextprotocol/client": "2.0.0",
     "@tanstack/router-cli": "1.167.34",
