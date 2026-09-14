@@ -21,7 +21,6 @@ data. `components.json` configures shadcn for extending the primitives.
 - App formatting scripts explicitly load `../../.prettierignore`; preserve that path so
   checks after a build exclude generated output.
 - The dev server defaults to http://localhost:9999; add `--port 3000` to use another port.
-- `pnpm --dir apps/<app-key> preview` builds and serves the production artifact locally.
 - Use `pnpm run deploy` explicitly; `pnpm deploy` is also a pnpm workspace command.
 - Generated routes and build artifacts are ignored. Route generation runs before typechecking,
   so adding a route does not require a dev server.
@@ -160,9 +159,8 @@ preview panel automatically supplies the signed-in user's App session. This back
 requirement does not introduce another user login: do not add an App login screen or tell an
 already signed-in user to log in again. Diagnose identity, session, routing, or API failures instead.
 
-The preview tool's `authentication-required` status describes an anonymous health probe without
-browser cookies, not the user's login state. For testing in the separate sandbox browser, follow
-`browser-use` to establish that browser's session yourself with `continual.apps.authUrl()`.
+For testing in the separate sandbox browser, follow `browser-use` to establish that browser's
+session yourself with `continual.apps.authUrl()`.
 Without credentials, the UI and `/api/health` still work at the application layer, while operation
 endpoints return 401; a private App's front Worker also enforces access before forwarding requests.
 
@@ -231,8 +229,8 @@ setting `allowedHosts: true`.
 ## Continual environment
 
 In a Continual sandbox, credentials are supplied automatically. Follow the
-platform's `app-development` and `continual-platform-sdk-cli` skills for preview
-registration, browser verification, and publication. No additional login is needed.
+platform's `app-development`, `browser-use`, and `continual-platform-sdk-cli` skills for
+previews, verification, and publication. No additional login is needed.
 
 On your own machine, use `pnpm exec continual login` and
 `pnpm exec continual link` as needed; inspect each command's `--help`.

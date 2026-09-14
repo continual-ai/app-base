@@ -11,7 +11,6 @@
     "check": "pnpm run format:check && pnpm run typecheck",
     "typecheck": "tsr generate && tsc --noEmit",
     "build": "vite build",
-    "preview": "pnpm run build && vite preview --host 0.0.0.0 --port 9999 --strictPort",
     "deploy": "pnpm run check && pnpm run build && pnpm exec continual deploy",
     "format": "prettier --ignore-path ../../.prettierignore --write .",
     "format:check": "prettier --ignore-path ../../.prettierignore --check .",
