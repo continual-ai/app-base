@@ -228,33 +228,11 @@ or a direct provider deployment command. Keep controlled sandbox preview hosts i
 `vite.config.ts`; extend with `CONTINUAL_ALLOWED_DEV_HOSTS` if needed rather than
 setting `allowedHosts: true`.
 
-## Preview and publish
-
-Each App on a Continual Branch has one stable App URL that routes either to a running sandbox
-development server or to a published build. Previewing switches that URL to the development server
-for everyone using the App on this Branch, potentially replacing a live published build. To preserve
-an existing deployment, arrange with the user to work in a Thread on a separate Continual Branch;
-changing the Git checkout does not change the Thread's Branch.
-
-For a development preview, start `pnpm --dir apps/<app-key> dev` with `local-server-manager`, using
-an available port and a distinct process label such as `app-<app-key>`. The dev script already binds
-to `0.0.0.0`; pass `--port <port>` when needed. Then call `environment__preview({ port, appKey })`
-with `continual.key` from the App's `package.json`. The platform creates or reuses the App record,
-routes its stable URL to the server, and shows it in the Thread preview panel. Verify the stable
-App URL, not localhost or a sandbox-specific address, using the platform's `app-development` and
-`browser-use` skills. Keep the dev server running while the preview is in use.
-
-Publish only when requested with `pnpm --dir apps/<app-key> run deploy`. This script checks and
-builds the App before `pnpm exec continual deploy` uploads and activates the artifact. The CLI does
-not build or start a server. Publication switches the same stable URL to the built version hosted
-on Cloudflare, with server code running in a Worker independently of the sandbox. App visibility
-and authentication apply to both previews and published builds.
-
 ## Continual environment
 
 In a Continual sandbox, credentials are supplied automatically. Follow the
-platform's `app-development` and `continual-platform-sdk-cli` skills for preview
-registration, browser verification, and publication. No additional login is needed.
+platform's `app-development`, `browser-use`, and `continual-platform-sdk-cli` skills for
+previews, verification, and publication. No additional login is needed.
 
 On your own machine, use `pnpm exec continual login` and
 `pnpm exec continual link` as needed; inspect each command's `--help`.
