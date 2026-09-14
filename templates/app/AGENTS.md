@@ -21,7 +21,8 @@ data. `components.json` configures shadcn for extending the primitives.
 - App formatting scripts explicitly load `../../.prettierignore`; preserve that path so
   checks after a build exclude generated output.
 - The dev server defaults to http://localhost:9999; add `--port 3000` to use another port.
-- `pnpm --dir apps/<app-key> preview` builds and serves the production artifact locally.
+- `pnpm --dir apps/<app-key> preview` builds and serves the production artifact locally;
+  it does not create a preview in the Continual UI.
 - Use `pnpm run deploy` explicitly; `pnpm deploy` is also a pnpm workspace command.
 - Generated routes and build artifacts are ignored. Route generation runs before typechecking,
   so adding a route does not require a dev server.
@@ -160,9 +161,8 @@ preview panel automatically supplies the signed-in user's App session. This back
 requirement does not introduce another user login: do not add an App login screen or tell an
 already signed-in user to log in again. Diagnose identity, session, routing, or API failures instead.
 
-The preview tool's `authentication-required` status describes an anonymous health probe without
-browser cookies, not the user's login state. For testing in the separate sandbox browser, follow
-`browser-use` to establish that browser's session yourself with `continual.apps.authUrl()`.
+For testing in the separate sandbox browser, follow `browser-use` to establish that browser's
+session yourself with `continual.apps.authUrl()`.
 Without credentials, the UI and `/api/health` still work at the application layer, while operation
 endpoints return 401; a private App's front Worker also enforces access before forwarding requests.
 
@@ -227,6 +227,28 @@ and emits Nitro `.output/`. Do not add a Wrangler configuration, a dry-run bundl
 or a direct provider deployment command. Keep controlled sandbox preview hosts in
 `vite.config.ts`; extend with `CONTINUAL_ALLOWED_DEV_HOSTS` if needed rather than
 setting `allowedHosts: true`.
+
+## Preview and publish
+
+Each App on a Continual Branch has one stable App URL that routes either to a running sandbox
+development server or to a published build. Previewing switches that URL to the development server
+for everyone using the App on this Branch, potentially replacing a live published build. To preserve
+an existing deployment, arrange with the user to work in a Thread on a separate Continual Branch;
+changing the Git checkout does not change the Thread's Branch.
+
+For a development preview, start `pnpm --dir apps/<app-key> dev` with `local-server-manager`, using
+an available port and a distinct process label such as `app-<app-key>`. The dev script already binds
+to `0.0.0.0`; pass `--port <port>` when needed. Then call `environment__preview({ port, appKey })`
+with `continual.key` from the App's `package.json`. The platform creates or reuses the App record,
+routes its stable URL to the server, and shows it in the Thread preview panel. Verify the stable
+App URL, not localhost or a sandbox-specific address, using the platform's `app-development` and
+`browser-use` skills. Keep the dev server running while the preview is in use.
+
+Publish only when requested with `pnpm --dir apps/<app-key> run deploy`. This script checks and
+builds the App before `pnpm exec continual deploy` uploads and activates the artifact. The CLI does
+not build or start a server. Publication switches the same stable URL to the built version hosted
+on Cloudflare, with server code running in a Worker independently of the sandbox. App visibility
+and authentication apply to both previews and published builds.
 
 ## Continual environment
 
