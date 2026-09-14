@@ -21,8 +21,6 @@ data. `components.json` configures shadcn for extending the primitives.
 - App formatting scripts explicitly load `../../.prettierignore`; preserve that path so
   checks after a build exclude generated output.
 - The dev server defaults to http://localhost:9999; add `--port 3000` to use another port.
-- `pnpm --dir apps/<app-key> preview` builds and serves the production artifact locally;
-  it does not create a preview in the Continual UI.
 - Use `pnpm run deploy` explicitly; `pnpm deploy` is also a pnpm workspace command.
 - Generated routes and build artifacts are ignored. Route generation runs before typechecking,
   so adding a route does not require a dev server.
