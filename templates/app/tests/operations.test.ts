@@ -244,6 +244,70 @@ describe("shared operations", () => {
     }
   });
 
+  it("logs output type failures for HTTP and MCP without exposing values", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      const api = createOperationApi(
+        {
+          inventorySnapshot: defineOperation({
+            description: "Return a database timestamp",
+            input: z.object({}),
+            output: z.object({ lastSyncAt: z.string(), count: z.number() }),
+            handler: async () => ({
+              // Reproduce a driver value hidden by an incorrect application type assertion.
+              lastSyncAt: new Date("2026-09-30T21:13:03Z") as unknown as string,
+              count: "private database value" as unknown as number,
+            }),
+          }),
+        },
+        async () => context(),
+      );
+      const response = await api.http(
+        request("inventorySnapshot"),
+        "inventorySnapshot",
+      );
+      expect(response.status).toBe(500);
+      expect(await response.json()).toEqual({
+        error: "The operation could not be completed.",
+      });
+      const client = await connect(api);
+      expect(
+        await client.callTool({ name: "inventorySnapshot", arguments: {} }),
+      ).toMatchObject({
+        isError: true,
+        content: [
+          { type: "text", text: "The operation could not be completed." },
+        ],
+      });
+      expect(log).toHaveBeenCalledTimes(2);
+      for (const call of log.mock.calls) {
+        expect(call[1]).toEqual({
+          operation: "inventorySnapshot",
+          issues: [
+            {
+              path: ["lastSyncAt"],
+              code: "invalid_type",
+              expected: "string",
+              received: "Date",
+            },
+            {
+              path: ["count"],
+              code: "invalid_type",
+              expected: "number",
+              received: "string",
+            },
+          ],
+        });
+      }
+      expect(JSON.stringify(log.mock.calls)).not.toContain(
+        "private database value",
+      );
+      expect(JSON.stringify(log.mock.calls)).not.toContain("2026-09-30");
+    } finally {
+      log.mockRestore();
+    }
+  });
+
   it("rejects unauthenticated requests, including MCP discovery", async () => {
     const { api } = fixture();
     expect((await api.http(request("read", {}, ""), "read")).status).toBe(401);

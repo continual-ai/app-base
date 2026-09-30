@@ -60,7 +60,7 @@ export function createOperationApi(
         } catch {
           return json({ error: "Expected a JSON request body." }, 400);
         }
-        return json(await operations[name].invoke(input, context));
+        return json(await operations[name].invoke(input, context, name));
       });
     },
     mcp(request: Request) {
