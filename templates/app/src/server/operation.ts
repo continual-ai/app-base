@@ -29,6 +29,7 @@ export interface Operation {
   invoke(
     input: unknown,
     context: OperationContext,
+    name?: string,
   ): Promise<Record<string, unknown>>;
   register(server: McpServer, name: string, context: OperationContext): void;
 }
@@ -51,12 +52,43 @@ export function defineOperation<
   z.toJSONSchema(definition.input);
   z.toJSONSchema(definition.output);
 
-  const invoke: Operation["invoke"] = async (input, context) => {
+  const invoke: Operation["invoke"] = async (
+    input,
+    context,
+    name = "unnamed",
+  ) => {
     const parsed = await definition.input.safeParseAsync(input);
     if (!parsed.success)
       throw new OperationError("Invalid operation input.", 400);
     const result = await definition.handler({ input: parsed.data, context });
-    return definition.output.parseAsync(result);
+    const output = await definition.output.safeParseAsync(result, {
+      reportInput: true,
+    });
+    if (!output.success) {
+      // Log schema diagnostics only: values and custom validation messages may contain secrets.
+      console.error("Operation output validation failed", {
+        operation: name,
+        issues: output.error.issues.map((issue) => ({
+          path: issue.path,
+          code: issue.code,
+          ...(issue.code === "invalid_type"
+            ? {
+                expected: issue.expected,
+                received:
+                  issue.input instanceof Date
+                    ? "Date"
+                    : issue.input === null
+                      ? "null"
+                      : Array.isArray(issue.input)
+                        ? "array"
+                        : typeof issue.input,
+              }
+            : {}),
+        })),
+      });
+      throw new Error("Operation output validation failed");
+    }
+    return output.data;
   };
 
   return {
@@ -72,7 +104,7 @@ export function defineOperation<
         },
         async (input) => {
           try {
-            const output = await invoke(input, context);
+            const output = await invoke(input, context, name);
             return {
               content: [{ type: "text", text: JSON.stringify(output) }],
               structuredContent: output,
