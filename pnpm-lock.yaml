@@ -18,8 +18,8 @@ importers:
   apps/app:
     dependencies:
       '@continual/sdk':
-        specifier: 0.5.6
-        version: 0.5.6
+        specifier: 0.5.8
+        version: 0.5.8
       '@fontsource-variable/geist':
         specifier: 5.2.9
         version: 5.2.9
@@ -286,8 +286,8 @@ packages:
     engines: {node: '>=24.0.0'}
     hasBin: true
 
-  '@continual/sdk@0.5.6':
-    resolution: {integrity: sha512-shH0J+yCiDHmifh/0Ew6Hs1uepCEmyJ22+4FHJoCsJYqK+6EqzqLlkC5k+DGRu+HfKR1bkk7r/f4Hg5LEssOFQ==}
+  '@continual/sdk@0.5.8':
+    resolution: {integrity: sha512-crjZW8OWop07gIbJB1JXbTmBd8ivZCYTdTwXtlZBYTgdwoeWvi10i5CTS0YQJ0fDgdcUOE7yOf8PBhOzhq9YjA==}
     engines: {node: '>=24.0.0'}
 
   '@continual/tanstack-start@0.1.3':
@@ -4340,7 +4340,7 @@ snapshots:
 
   '@continual/cli@0.5.14': {}
 
-  '@continual/sdk@0.5.6':
+  '@continual/sdk@0.5.8':
     dependencies:
       zod: 3.25.76
       zod-to-json-schema: 3.25.2(zod@3.25.76)
