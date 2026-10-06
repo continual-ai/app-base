@@ -14,7 +14,8 @@
     "deploy": "pnpm run check && pnpm run build && pnpm exec continual deploy",
     "format": "prettier --ignore-path ../../.prettierignore --write .",
     "format:check": "prettier --ignore-path ../../.prettierignore --check .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "script": "tsx"
   },
   "dependencies": {
     "@continual/sdk": "0.5.8",
@@ -46,7 +47,8 @@
     "typescript": "6.0.3",
     "vite": "8.2.2",
     "vitest": "5.0.0",
-    "wrangler": "4.129.0"
+    "wrangler": "4.129.0",
+    "tsx": "4.23.15"
   },
   "continual": {
     "key": "app",

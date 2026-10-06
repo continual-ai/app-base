@@ -1,14 +1,12 @@
 import { Buffer } from "node:buffer";
-import {
-  APP_RUNTIME_ASSERTION_HEADER,
-  createAppServerClient,
-} from "@continual/sdk/app";
+import { APP_RUNTIME_ASSERTION_HEADER } from "@continual/sdk/app";
+import { createContinual } from "./continual";
 import type { OperationContext } from "./operation";
 
 export async function createOperationContext(
   request: Request,
 ): Promise<OperationContext> {
-  const continual = createAppServerClient({ request });
+  const continual = createContinual(request);
   // auth.me() verifies this request's runtime assertion with Continual before any
   // assertion claims are used. Merely decoding a JWT does not authenticate it.
   const actor = await continual.auth.me();

@@ -1,12 +1,13 @@
-import type { AppServerClient, AuthenticatedActor } from "@continual/sdk/app";
+import type { AuthenticatedActor } from "@continual/sdk/app";
 import type { McpServer, ToolAnnotations } from "@modelcontextprotocol/server";
 import { z } from "zod";
+import type { createContinual } from "./continual";
 
 export interface OperationContext {
   /** Public origin established by request authentication, never forwarded headers. */
   origin?: string;
   actor: AuthenticatedActor;
-  continual: AppServerClient;
+  continual: ReturnType<typeof createContinual>;
 }
 
 /** Only explicitly safe application errors may cross either transport. */
