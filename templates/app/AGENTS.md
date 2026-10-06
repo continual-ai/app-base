@@ -248,3 +248,19 @@ The App includes `playwright` as a pinned dev dependency, so scripts can use nor
 Keep its version aligned with the Continual sandbox base image. Managed sandboxes reuse
 preinstalled Chromium through `PLAYWRIGHT_BROWSERS_PATH`; no browser download is needed there.
 Outside the sandbox, install Chromium with `pnpm --dir apps/<app-key> exec playwright install chromium`.
+
+## Generated connector tools and scripts
+
+Configure typed tool calls in `src/server/continual.ts`. Generate the required catalog in this App,
+import `projectToolCatalog` there, and pass it to `createAppServerClient({ request, toolCatalog:
+projectToolCatalog })`. Keep the factory return type inferred; `OperationContext` derives its client
+type from that factory. Do not annotate it as plain `AppServerClient`, which drops catalog methods.
+
+Include every tool the workflow calls when generating a filtered catalog. Selecting only a Drive
+Connection does not include `platform.automations_run`; include that platform tool too. Missing
+namespaces require regenerating the catalog, not inventing interfaces or casting the client.
+
+Run TypeScript scripts from this App with `pnpm run script scripts/example.ts` (or
+`pnpm exec tsx scripts/example.ts`). The installed runner resolves the generated modules' `.js`
+imports to their TypeScript sources. Do not use plain Node or Node's type stripping to execute
+uncompiled generated catalogs. Run from the App directory so its dependencies resolve.
