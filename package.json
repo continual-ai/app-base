@@ -13,7 +13,7 @@
     "test": "pnpm -r run test"
   },
   "devDependencies": {
-    "@continual/cli": "0.5.14",
+    "@continual/cli": "0.5.19",
     "prettier": "3.9.6"
   }
 }

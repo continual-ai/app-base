@@ -83,7 +83,14 @@ URLs; serve from `/` in both development and production.
 Use the SDK caller identity in managed previews as well as production; never replace it with
 a shared development owner. Verify data-backed flows through the authenticated stable URL.
 Keep `GET /api/health` dependency-free and preserve the root route's
-`initDesignMode()` and `initTelemetry()` browser initialization.
+`initDesignMode()` and `initTelemetry()` browser initialization exactly, with no arguments.
+Removing `initDesignMode()` disables design mode and preview feedback. Continual's App panel
+negotiates the feedback editor with the installed SDK, so the call never changes. If the preview
+shows an in-App feedback toolbar, or feedback boxes stay put while the App scrolls, the dev server
+is serving `@continual/sdk` older than 0.5.9: check the installed version, reinstall
+dependencies, and restart the dev server with Vite's dependency cache cleared (`vite dev --force`,
+or delete `node_modules/.vite`) instead of editing the call. A plain restart can keep serving the
+old pre-bundled SDK.
 
 Use a stable `{ error: string }` response. Return 400 for malformed JSON and invalid
 request shapes. Show explicitly safe validation messages; use a friendly generic message
