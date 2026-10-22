@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@continual/cli':
-        specifier: 0.5.14
-        version: 0.5.14
+        specifier: 0.5.19
+        version: 0.5.19
       prettier:
         specifier: 3.9.6
         version: 3.9.6
@@ -18,8 +18,8 @@ importers:
   apps/app:
     dependencies:
       '@continual/sdk':
-        specifier: 0.5.10
-        version: 0.5.10
+        specifier: 0.5.11
+        version: 0.5.11
       '@fontsource-variable/geist':
         specifier: 5.2.9
         version: 5.2.9
@@ -284,13 +284,13 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@continual/cli@0.5.14':
-    resolution: {integrity: sha512-hZvYlA+arYlqghOlp9A8jqvLdDCaqGui568Zo8Svpr1oy77urhI9ogRYexD9I/zu5c2HWKy7u4Tv8bYwHa4/DA==}
+  '@continual/cli@0.5.19':
+    resolution: {integrity: sha512-qv/qbeL+IREY988X1uFICu1+S0xpoXsyDnuGh0IhW5lpQcJCxyZYouD4ftkmht6GDTyJRfdMOEF7zFE2G9+dUw==}
     engines: {node: '>=24.0.0'}
     hasBin: true
 
-  '@continual/sdk@0.5.10':
-    resolution: {integrity: sha512-Q7wTGtyL61SokoOK7Zzf8GMY97f1j6JS+ECZdhLVX0kRjKEsPYvwh+JHdJWWRw/S+Fgqo3bMRFTBiKy6RBKY9A==}
+  '@continual/sdk@0.5.11':
+    resolution: {integrity: sha512-Mk7+vJNc3rGukRrLW6G4RlGXNF3D++KLc0Hat1jdmaW8jdOLxzh3EH2XHzSBd1SRPAqN85SivAul9+lz4iAMNA==}
     engines: {node: '>=24.0.0'}
 
   '@continual/tanstack-start@0.1.3':
@@ -4346,9 +4346,9 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20260903.1':
     optional: true
 
-  '@continual/cli@0.5.14': {}
+  '@continual/cli@0.5.19': {}
 
-  '@continual/sdk@0.5.10':
+  '@continual/sdk@0.5.11':
     dependencies:
       zod: 3.25.76
       zod-to-json-schema: 3.25.2(zod@3.25.76)
