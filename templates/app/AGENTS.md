@@ -83,7 +83,12 @@ URLs; serve from `/` in both development and production.
 Use the SDK caller identity in managed previews as well as production; never replace it with
 a shared development owner. Verify data-backed flows through the authenticated stable URL.
 Keep `GET /api/health` dependency-free and preserve the root route's
-`initDesignMode()` and `initTelemetry()` browser initialization.
+`initDesignMode()` and `initTelemetry()` browser initialization exactly, with no arguments.
+Removing `initDesignMode()` disables design mode and preview feedback. Continual's App panel
+negotiates the feedback editor with the installed SDK, so the call never changes. If the preview
+shows an in-App feedback toolbar, or feedback boxes stay put while the App scrolls, the dev server
+is serving `@continual/sdk` older than 0.5.9: check the installed version, reinstall
+dependencies, and restart the dev server instead of editing the call.
 
 Use a stable `{ error: string }` response. Return 400 for malformed JSON and invalid
 request shapes. Show explicitly safe validation messages; use a friendly generic message
