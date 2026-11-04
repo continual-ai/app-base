@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 
 const paths = {
   search: "m21 21-4.3-4.3 M19 11a8 8 0 1 1-16 0 8 8 0 0 1 16 0",
+  menu: "M4 6h16 M4 12h16 M4 18h16",
   plus: "M12 5v14 M5 12h14",
   close: "m6 6 12 12 M6 18 18 6",
   check: "m5 12 4 4L19 6",

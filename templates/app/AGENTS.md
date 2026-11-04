@@ -53,7 +53,7 @@ layout, data model, and workflows to fit its users. Add code only as needed.
 Use the source-owned primitives in `src/components/ui/`, `cn` in
 `src/lib/utils.ts`, and semantic tokens in `src/styles/tokens.css`.
 The primitive APIs below cover normal usage; read their source only when customizing behavior.
-All support `className` and their element's normal props.
+UI primitives support `className` and their element's normal props.
 
 | Import path under `@/components/ui/` | Exports and common props                                                                                                                                                              |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -62,7 +62,9 @@ All support `className` and their element's normal props.
 | `card`                               | `Card` (sizes `default`, `sm`), `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, `CardFooter`                                                               |
 | `input`, `textarea`, `label`         | `Input`, `Textarea`, `Label`; connect labels with `htmlFor` and input `id`                                                                                                            |
 | `separator`                          | `Separator` from Radix; horizontal by default                                                                                                                                         |
-| `icon`                               | `Icon`: names `search`, `plus`, `close`, `check`, `arrowRight`, `chevronDown`, `star`, `mapPin`; decorative, no dependency                                                            |
+| `table`                              | `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableCaption`; scroll container included                                                                  |
+| `sheet`                              | `Sheet`, `SheetTrigger`, `SheetClose`, `SheetContent` (side `left` or `right`), `SheetTitle`, `SheetDescription`; include a title                                                     |
+| `icon`                               | `Icon`: names `search`, `plus`, `close`, `check`, `arrowRight`, `chevronDown`, `star`, `mapPin`, `menu`; decorative, no dependency                                                    |
 
 ```tsx
 <Button type="button" variant="outline"><Icon name="plus" />Add item</Button>
@@ -73,6 +75,15 @@ Reuse these icons when they fit; add only the missing icons the product needs.
 Use `bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, and
 `bg-primary text-primary-foreground` with the existing semantic tokens.
 Add further primitives when needed using the checked-in shadcn configuration.
+Design the main screen at 390px wide first, then widen. The page must never scroll sideways.
+Use `AppShell` from `@/components/blocks/app-shell` when an App needs a sidebar; never use a
+fixed sidebar below `lg`. Pass `appName`, `navigation`, and content as `children`.
+Use `ResponsiveRecords` from `@/components/blocks/responsive-records` for primary lists;
+pass `records`, `columns` (`id`, `header`, `cell(record)`), `getRowKey`, and a descriptive `caption`.
+It shares column renderers between stacked phone rows and a table at `md` and up.
+Use the plain `Table` only for secondary or wide reference data; it scrolls inside its container.
+Use `min-w-0` on flex and grid children holding text; wrap or truncate long values.
+
 Preserve accessible labels, keyboard interaction, visible focus, and contrast.
 Do not add a dashboard, generic CRUD framework, or business model by default.
 
