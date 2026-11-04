@@ -75,7 +75,9 @@ Reuse these icons when they fit; add only the missing icons the product needs.
 Use `bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, and
 `bg-primary text-primary-foreground` with the existing semantic tokens.
 Add further primitives when needed using the checked-in shadcn configuration.
-Design the main screen at 390px wide first, then widen. The page must never scroll sideways.
+Design the main screen at 360px wide first, then widen. The page must never scroll sideways.
+Screens are checked at 360px: no sideways scroll, no primary list table showing less than 60%
+of its width on a phone, and no side rail below `lg`.
 Use `AppShell` from `@/components/blocks/app-shell` when an App needs a sidebar; never use a
 fixed sidebar below `lg`. Pass `appName`, `navigation`, and content as `children`.
 Use `ResponsiveRecords` from `@/components/blocks/responsive-records` for primary lists;
