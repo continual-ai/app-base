@@ -20,13 +20,15 @@ function SheetContent({
     <Dialog.Portal>
       <Dialog.Overlay
         data-slot="sheet-overlay"
-        className="fixed inset-0 z-50 bg-black/50"
+        className="fixed inset-0 z-50 bg-black/30"
       />
       <Dialog.Content
         data-slot="sheet-content"
         className={cn(
-          "fixed inset-y-0 z-50 flex w-80 max-w-[calc(100%-2rem)] flex-col gap-4 overflow-y-auto bg-background p-4 text-foreground shadow-lg outline-none",
-          side === "left" ? "left-0 border-r" : "right-0 border-l",
+          "fixed inset-y-0 z-50 flex w-80 max-w-[calc(100%-2rem)] flex-col gap-4 overflow-y-auto bg-background p-4 text-foreground shadow-raised outline-none",
+          side === "left"
+            ? "left-0 border-r border-line"
+            : "right-0 border-l border-line",
           className,
         )}
         {...props}

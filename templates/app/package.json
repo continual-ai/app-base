@@ -8,8 +8,9 @@
   },
   "scripts": {
     "dev": "vite dev --host 0.0.0.0 --port 9999 --strictPort",
-    "check": "pnpm run format:check && pnpm run typecheck",
+    "check": "pnpm run format:check && pnpm run typecheck && pnpm run kit:check",
     "typecheck": "tsr generate && tsc --noEmit",
+    "kit:check": "tsx scripts/kit-check.ts",
     "build": "vite build",
     "deploy": "pnpm run check && pnpm run build && pnpm exec continual deploy",
     "format": "prettier --ignore-path ../../.prettierignore --write .",
@@ -19,8 +20,7 @@
   },
   "dependencies": {
     "@continual/sdk": "0.5.13",
-    "@fontsource-variable/geist": "5.2.9",
-    "@fontsource-variable/geist-mono": "5.3.0",
+    "@fontsource-variable/inter": "5.2.8",
     "@modelcontextprotocol/server": "2.0.0",
     "@neondatabase/serverless": "1.1.0",
     "@tanstack/react-router": "1.170.21",
