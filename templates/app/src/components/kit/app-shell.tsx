@@ -228,7 +228,10 @@ export function AppShell({
   );
 }
 
-/** The 48px bar at the top of the panel: the view's title or trail on the left, its actions on the right. */
+/**
+ * The 48px bar at the top of the panel: the view's title or trail on the left,
+ * its actions on the right. Phones show the title in the shell's bar instead.
+ */
 export function PanelHeader({
   title,
   trail = [],
@@ -243,7 +246,7 @@ export function PanelHeader({
   actions?: ReactNode;
 }) {
   return (
-    <div className="flex min-h-12 min-w-0 shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-line px-4 py-2">
+    <div className="flex min-h-12 min-w-0 shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-line px-4 py-2 max-lg:hidden">
       <div className="flex min-w-0 items-center gap-1.5 text-small">
         {trail.map((part, index) => (
           <span

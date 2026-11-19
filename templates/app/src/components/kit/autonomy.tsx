@@ -61,7 +61,14 @@ export function AutonomyDial({
         {levels.map((level, index) => (
           <button
             aria-checked={index === value}
-            className="min-w-0 rounded-md p-1 text-left focus-visible:outline-2 focus-visible:outline-ring"
+            className={cn(
+              "min-w-0 rounded-md p-1 focus-visible:outline-2 focus-visible:outline-ring",
+              index === 0
+                ? "text-left"
+                : index === levels.length - 1
+                  ? "text-right"
+                  : "text-center",
+            )}
             key={level.label}
             onClick={() => onChange(index)}
             onKeyDown={(event) => {
@@ -126,7 +133,7 @@ export function StepList({
             className="flex min-w-0 items-center gap-3 border-t border-line px-4 py-2.5 first:border-0"
             key={index}
           >
-            <span className="w-14 shrink-0 font-mono text-caption text-muted-foreground">
+            <span className="w-16 shrink-0 font-mono text-caption whitespace-nowrap text-muted-foreground">
               {step.when}
             </span>
             <span
