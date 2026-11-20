@@ -39,6 +39,7 @@ Paths below are relative to `apps/<app-key>/`.
 | ------------------------------------------- | ------------------------------------------------ |
 | Home page                                   | `src/routes/index.tsx`                           |
 | Document, metadata, favicon, preview hooks  | `src/routes/__root.tsx`                          |
+| Light and dark, and the person's choice     | `src/lib/theme.ts`                               |
 | Liveness endpoint                           | `src/routes/api.health.ts`                       |
 | Router                                      | `src/router.tsx`                                 |
 | Global styles and tokens                    | `src/styles/global.css`, `src/styles/tokens.css` |
@@ -73,7 +74,8 @@ UI primitives support `className` and their element's normal props.
 <Button type="button" size="icon" aria-label="Close"><Icon name="close" /></Button>
 ```
 
-Reuse these icons when they fit; add only the missing icons the product needs.
+Reuse these icons when they fit. For any other icon, import it from `lucide-react` (already a
+dependency) instead of drawing paths.
 Add further primitives when needed using the checked-in shadcn configuration.
 Design the main screen at 360px wide first, then widen. The page must never scroll sideways.
 Screens are checked at 360px: no sideways scroll, no primary list table showing less than 60%
@@ -112,6 +114,13 @@ Run `pnpm run kit:check` before calling a screen done; `pnpm check` runs it too.
 - One accent per App, used sparingly: the selected item, counts, links and the first chart series.
   The primary button is the dark `default` variant; status tones (red, amber, green, blue, gray)
   always show their label too.
+- Light and dark come for free. `AppShell` and `AppHeader` show a `ThemePicker` (Automatic, Light,
+  Dark) beside the person signed in; keep it there. Automatic follows Continual inside Continual
+  and the device elsewhere (`src/lib/theme.ts`). Use the tokens, never `bg-white`, `text-black`
+  or hex colors, so both stay readable.
+- The App's mark is an icon for what it does, passed as `icon` to `AppShell` or `AppHeader`: a
+  `lucide-react` export such as `Receipt` for invoices, `Truck` for deliveries or `Megaphone` for
+  campaigns. Never the company's initial.
 - An agent is always `AgentMark`, never a sparkle, robot or person's avatar.
 - Motion: `duration-150 ease-kit` for hover and press, `motion-safe:animate-kit-enter` for things
   that appear, `motion-safe:animate-kit-stagger` with `style={stagger(index)}` for the rows of a
@@ -125,6 +134,7 @@ Run `pnpm run kit:check` before calling a screen done; `pnpm check` runs it too.
 | ------------------------------------ | ------------------------------------------------------------------------- |
 | `AppShell`, `PanelHeader`            | The frame: sidebar sections on the canvas, the App on an inset panel      |
 | `AppHeader`, `BrandMark`             | A top bar instead, for a single-screen App                                |
+| `ThemePicker`                        | Light, dark or automatic; already in `AppShell` and `AppHeader`           |
 | `PageHeader`, `SectionHeader`        | A view's title and one line on its purpose; headings inside a view        |
 | `KpiTiles`                           | Two to four stat cards, each with a note, `trend` and optional `spark`    |
 | `TrendChart`, `Breakdown`, `Heatmap` | A line or bar trend; how a total splits; values by row and period         |
@@ -178,7 +188,7 @@ ones the App needs:
 
 ### Before calling an App ready
 
-Look at it at 390px and 1440px wide, in light and dark (`dark` on `<html>`), and check:
+Look at it at 390px and 1440px wide, in light and dark, and check:
 
 - Nothing scrolls sideways or overlaps, and long names wrap instead of clipping.
 - Every control is at least 36px tall on phones, with a visible focus ring.

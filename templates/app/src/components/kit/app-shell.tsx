@@ -7,9 +7,10 @@ import {
 } from "@/components/ui/sheet";
 import { useViewer } from "@/lib/use-viewer";
 import { cn } from "@/lib/utils";
-import { BrandMark } from "./app-header";
+import { BrandMark, type AppIcon } from "./app-header";
 import { initials } from "./format";
 import { KitIcon, type KitIconName } from "./icons";
+import { ThemePicker } from "./theme-picker";
 
 export type ShellItem = {
   label: string;
@@ -83,11 +84,13 @@ function NavItem({ item, onPick }: { item: ShellItem; onPick?: () => void }) {
 
 function Navigation({
   name,
+  icon,
   subtitle,
   sections,
   onPick,
 }: {
   name: string;
+  icon: AppIcon;
   subtitle?: string;
   sections: ShellSection[];
   onPick?: () => void;
@@ -96,10 +99,7 @@ function Navigation({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex min-w-0 items-center gap-2.5 px-2 pt-1 pb-4">
-        <BrandMark
-          name={subtitle || name}
-          className="size-6 rounded-md text-caption"
-        />
+        <BrandMark icon={icon} className="size-6 rounded-md" />
         <div className="min-w-0 leading-tight">
           <div className="truncate text-small font-medium text-strong">
             {name}
@@ -128,19 +128,22 @@ function Navigation({
           </div>
         ))}
       </nav>
-      {viewer ? (
-        <div className="mt-3 flex min-w-0 items-center gap-2 px-2 py-2">
-          <span
-            aria-hidden="true"
-            className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-soft text-micro font-semibold text-brand-ink"
-          >
-            {initials(viewer.name)}
-          </span>
-          <span className="min-w-0 truncate text-small font-medium text-strong">
-            {viewer.name}
-          </span>
-        </div>
-      ) : null}
+      <div className="mt-3 flex min-w-0 items-center gap-2 px-2 py-2">
+        {viewer ? (
+          <>
+            <span
+              aria-hidden="true"
+              className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-soft text-micro font-semibold text-brand-ink"
+            >
+              {initials(viewer.name)}
+            </span>
+            <span className="min-w-0 flex-1 truncate text-small font-medium text-strong">
+              {viewer.name}
+            </span>
+          </>
+        ) : null}
+        <ThemePicker className="ml-auto" />
+      </div>
     </div>
   );
 }
@@ -152,12 +155,15 @@ function Navigation({
  */
 export function AppShell({
   name,
+  icon,
   subtitle,
   sections,
   children,
   className,
 }: {
   name: string;
+  /** What the App does, as an icon; see `AppIcon`. */
+  icon: AppIcon;
   /** Usually the company the App is for. */
   subtitle?: string;
   sections: ShellSection[];
@@ -181,7 +187,12 @@ export function AppShell({
   return (
     <div className="min-h-svh min-w-0 bg-canvas text-foreground lg:grid lg:h-svh lg:grid-cols-[15rem_minmax(0,1fr)] lg:p-2 lg:pl-0">
       <aside className="hidden min-h-0 px-3 pt-3 pb-1 lg:block">
-        <Navigation name={name} sections={sections} subtitle={subtitle} />
+        <Navigation
+          icon={icon}
+          name={name}
+          sections={sections}
+          subtitle={subtitle}
+        />
       </aside>
       <header className="sticky top-0 z-30 flex min-w-0 items-center gap-2 border-b border-line bg-canvas/75 px-2 py-1.5 backdrop-blur-xl backdrop-saturate-150 lg:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
@@ -197,6 +208,7 @@ export function AppShell({
           <SheetContent side="left" aria-describedby={undefined}>
             <SheetTitle className="sr-only">{name}</SheetTitle>
             <Navigation
+              icon={icon}
               name={name}
               onPick={() => setOpen(false)}
               sections={sections}
@@ -204,10 +216,7 @@ export function AppShell({
             />
           </SheetContent>
         </Sheet>
-        <BrandMark
-          name={subtitle || name}
-          className="size-6 rounded-md text-caption"
-        />
+        <BrandMark icon={icon} className="size-6 rounded-md" />
         <span className="min-w-0 truncate text-small font-medium text-strong">
           {current?.label ?? name}
         </span>

@@ -14,7 +14,12 @@ export {
   type AutonomyLevel,
   type Step,
 } from "./autonomy";
-export { AppHeader, BrandMark, type HeaderView } from "./app-header";
+export {
+  AppHeader,
+  BrandMark,
+  type AppIcon,
+  type HeaderView,
+} from "./app-header";
 export { BoardCard, BoardView, type BoardColumn } from "./board";
 export { Breakdown, type BreakdownPart } from "./breakdown";
 export { DetailPanel, opensAsSheet } from "./detail-panel";
@@ -47,3 +52,4 @@ export { Kbd, Tray } from "./tray";
 export { chartColor, toneClass, toneColor, toneDot, type Tone } from "./tones";
 export { TrendChart, formatChartValue, type ChartData } from "./trend-chart";
 export { Delta, RelativeDate, Sparkline } from "./values";
+export { ThemePicker } from "./theme-picker";

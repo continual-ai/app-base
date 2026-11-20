@@ -1,29 +1,40 @@
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { useViewer } from "@/lib/use-viewer";
 import { cn } from "@/lib/utils";
 import { initials } from "./format";
 import { KitIcon, type KitIconName } from "./icons";
+import { ThemePicker } from "./theme-picker";
 
 export type HeaderView = { label: string; icon?: KitIconName; count?: number };
 
-/** The App's mark: the company's initial on the accent, with a soft top light. */
+/**
+ * An icon component, such as a `lucide-react` export, that says what the App
+ * does: `Receipt` for invoices, `Truck` for deliveries, `Megaphone` for
+ * campaigns. Never the company's initial.
+ */
+export type AppIcon = ComponentType<{
+  className?: string;
+  strokeWidth?: number;
+}>;
+
+/** The App's mark: its icon on the accent, with a soft top light. */
 export function BrandMark({
-  name,
+  icon: Icon,
   className,
 }: {
-  name: string;
+  icon: AppIcon;
   className?: string;
 }) {
   return (
     <span
       aria-hidden="true"
       className={cn(
-        "relative flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-brand text-body font-semibold text-brand-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.25),inset_0_0_0_1px_rgb(0_0_0/0.08),0_1px_2px_rgb(0_0_0/0.12)]",
+        "relative flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-brand text-brand-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.25),inset_0_0_0_1px_rgb(0_0_0/0.08),0_1px_2px_rgb(0_0_0/0.12)]",
         className,
       )}
     >
       <span className="absolute inset-0 bg-linear-to-b from-white/20 to-transparent" />
-      <span className="relative">{initials(name).slice(0, 1)}</span>
+      <Icon className="relative size-[56%]" strokeWidth={2} />
     </span>
   );
 }
@@ -34,6 +45,7 @@ export function BrandMark({
  */
 export function AppHeader({
   name,
+  icon,
   subtitle,
   views = [],
   current = 0,
@@ -41,6 +53,8 @@ export function AppHeader({
   actions,
 }: {
   name: string;
+  /** What the App does, as an icon; see `AppIcon`. */
+  icon: AppIcon;
   /** Usually the company the App is for. */
   subtitle?: string;
   views?: HeaderView[];
@@ -54,7 +68,7 @@ export function AppHeader({
     <header className="sticky top-0 z-30 border-b bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1440px] flex-wrap items-center gap-x-8 px-4 sm:px-6">
         <div className="flex min-w-0 items-center gap-3 py-3">
-          <BrandMark name={subtitle || name} />
+          <BrandMark icon={icon} />
           <div className="min-w-0">
             <h1 className="truncate text-title font-medium text-strong">
               {name}
@@ -115,25 +129,24 @@ export function AppHeader({
             })}
           </nav>
         ) : null}
-        {actions || viewer ? (
-          <div className="ml-auto flex shrink-0 items-center gap-2.5 py-3">
-            {actions}
-            {viewer ? (
-              <>
-                <span className="hidden max-w-40 truncate text-small font-medium md:block">
-                  {viewer.name}
-                </span>
-                <span
-                  aria-label={`Signed in as ${viewer.name}`}
-                  className="flex size-8 items-center justify-center rounded-full bg-brand-soft text-caption font-semibold text-brand-ink ring-1 ring-brand/15"
-                  role="img"
-                >
-                  {initials(viewer.name)}
-                </span>
-              </>
-            ) : null}
-          </div>
-        ) : null}
+        <div className="ml-auto flex shrink-0 items-center gap-2.5 py-3">
+          {actions}
+          <ThemePicker />
+          {viewer ? (
+            <>
+              <span className="hidden max-w-40 truncate text-small font-medium md:block">
+                {viewer.name}
+              </span>
+              <span
+                aria-label={`Signed in as ${viewer.name}`}
+                className="flex size-8 items-center justify-center rounded-full bg-brand-soft text-caption font-semibold text-brand-ink ring-1 ring-brand/15"
+                role="img"
+              >
+                {initials(viewer.name)}
+              </span>
+            </>
+          ) : null}
+        </div>
       </div>
     </header>
   );
