@@ -1,6 +1,7 @@
 /**
- * The design system's rules from AGENTS.md as patterns: no raw colors, no
- * type sizes or shadows outside the scale, no bold. `pnpm run kit:check`
+ * The design system's rules from AGENTS.md as patterns: no raw colors (white
+ * and black included, since they stay put in dark mode), no type sizes or
+ * shadows outside the scale, no bold. `pnpm run kit:check`
  * applies them to the App's screens.
  */
 
@@ -15,7 +16,7 @@ const rules: { pattern: RegExp; message: string }[] = [
   },
   {
     pattern:
-      /\b(color|background|backgroundColor|fill|stroke|borderColor)\s*:\s*["'`](#|rgb|hsl|oklch)/,
+      /\b(color|background|backgroundColor|fill|stroke|borderColor)\s*:\s*["'`](#|rgb|hsl|oklch|white\b|black\b)/,
     message:
       "Raw color in a style: use a token such as var(--brand) or var(--tone-red-dot).",
   },
@@ -25,6 +26,12 @@ const rules: { pattern: RegExp; message: string }[] = [
     ),
     message:
       "Tailwind palette color: use a token class such as text-tone-red or bg-brand-soft.",
+  },
+  {
+    pattern:
+      /\b(bg|text|border(-[trblxyse])?|divide|ring|fill|stroke|from|to|via|outline|decoration|placeholder|caret|shadow)-(white|black)\b/,
+    message:
+      "White or black stays the same in dark mode: use a token class such as bg-card, bg-background, text-foreground or border-line.",
   },
   {
     pattern: /\btext-\[\d/,
