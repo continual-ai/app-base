@@ -22,8 +22,9 @@ let renewing: Promise<boolean> | null = null;
 
 /**
  * Inside Continual, the App's sign-in lasts a few minutes while the page can
- * stay open for hours. When it lapses, ask Continual for a fresh sign-in link
- * and open it in the background, so the request can be retried once.
+ * stay open for hours. When it lapses, ask Continual to sign the App in again;
+ * it answers once the new session is in place, so the request can be retried
+ * once.
  */
 function renewSession(): Promise<boolean> {
   if (window.parent === window) return Promise.resolve(false);
@@ -36,20 +37,12 @@ function renewSession(): Promise<boolean> {
     };
     const onMessage = (event: MessageEvent) => {
       if (
-        event.source !== window.parent ||
-        event.data?.type !== "continual:app-session" ||
-        typeof event.data.url !== "string"
+        event.source === window.parent &&
+        event.data?.type === "continual:app-session"
       )
-        return;
-      const url = new URL(event.data.url);
-      if (url.origin !== window.location.origin) return finish(false);
-      // Opening the link signs this page in again; where it redirects to is not needed.
-      fetch(url, { redirect: "manual" }).then(
-        () => finish(true),
-        () => finish(false),
-      );
+        finish(true);
     };
-    const timeout = setTimeout(() => finish(false), 5_000);
+    const timeout = setTimeout(() => finish(false), 15_000);
     window.addEventListener("message", onMessage);
     window.parent.postMessage(
       {
