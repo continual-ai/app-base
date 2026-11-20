@@ -183,7 +183,7 @@ export function AppShell({
       <aside className="hidden min-h-0 px-3 pt-3 pb-1 lg:block">
         <Navigation name={name} sections={sections} subtitle={subtitle} />
       </aside>
-      <header className="sticky top-0 z-30 flex min-w-0 items-center gap-2 border-b border-line bg-canvas/90 px-2 py-1.5 backdrop-blur-md lg:hidden">
+      <header className="sticky top-0 z-30 flex min-w-0 items-center gap-2 border-b border-line bg-canvas/75 px-2 py-1.5 backdrop-blur-xl backdrop-saturate-150 lg:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <button
@@ -194,11 +194,7 @@ export function AppShell({
               <KitIcon name="menu" className="size-5" />
             </button>
           </SheetTrigger>
-          <SheetContent
-            side="left"
-            aria-describedby={undefined}
-            className="bg-canvas"
-          >
+          <SheetContent side="left" aria-describedby={undefined}>
             <SheetTitle className="sr-only">{name}</SheetTitle>
             <Navigation
               name={name}

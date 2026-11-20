@@ -40,10 +40,13 @@ export function Breakdown({
         {total ? <span className="ml-auto tabular-nums">{total}</span> : null}
       </h2>
       <div className="px-4 pt-3.5 pb-1">
-        <div aria-hidden="true" className="flex h-2.5 gap-0.5">
+        <div
+          aria-hidden="true"
+          className="flex h-2.5 origin-left gap-0.5 motion-safe:animate-kit-grow"
+        >
           {parts.map((part) => (
             <span
-              className="h-full rounded-xs first:rounded-l-full last:rounded-r-full"
+              className="h-full rounded-xs transition-[width] duration-300 ease-kit first:rounded-l-full last:rounded-r-full"
               key={part.label}
               style={{
                 width: `${(part.value / sum) * 100}%`,

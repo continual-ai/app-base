@@ -2,12 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 import { KitIcon } from "./icons";
 
 type ToastAction = { label: string; onClick: () => void };
-type ToastMessage = { key: number; text: string; action?: ToastAction };
+type ToastMessage = {
+  key: number;
+  text: string;
+  action?: ToastAction;
+  tone: "done" | "failed";
+};
 
 /**
  * A short confirmation after an action: `const [toast, show] = useToast()`.
  * Pass an action such as Undo as the second argument; the toast then stays a
- * little longer.
+ * little longer. Pass `"failed"` third when something did not happen.
  */
 export function useToast() {
   const [toast, setToast] = useState<ToastMessage | null>(null);
@@ -17,8 +22,8 @@ export function useToast() {
     return () => clearTimeout(timer);
   }, [toast]);
   const show = useCallback(
-    (text: string, action?: ToastAction) =>
-      setToast({ key: Date.now(), text, action }),
+    (text: string, action?: ToastAction, tone: "done" | "failed" = "done") =>
+      setToast({ key: Date.now(), text, action, tone }),
     [],
   );
   const dismiss = useCallback(() => setToast(null), []);
@@ -41,12 +46,18 @@ export function Toast({
     >
       {toast ? (
         <div
-          className="pointer-events-auto flex max-w-full items-center gap-2.5 rounded-xl bg-popover py-2 pr-2 pl-3 text-small font-medium text-strong shadow-raised motion-safe:animate-kit-enter"
+          className="glass pointer-events-auto flex max-w-full items-center gap-2.5 rounded-xl py-2 pr-2 pl-3 text-small font-medium text-strong motion-safe:animate-kit-rise"
           key={toast.key}
         >
-          <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-tone-green-soft text-tone-green">
-            <KitIcon name="check" className="size-3" />
-          </span>
+          {toast.tone === "failed" ? (
+            <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-tone-red-soft text-tone-red">
+              <KitIcon name="warning" className="size-3" />
+            </span>
+          ) : (
+            <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-tone-green-soft text-tone-green">
+              <KitIcon name="check" className="size-3" />
+            </span>
+          )}
           <span className="min-w-0 truncate py-0.5">{toast.text}</span>
           {toast.action ? (
             <button

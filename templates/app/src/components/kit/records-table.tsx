@@ -1,6 +1,6 @@
 import type { Key, MouseEvent, ReactNode } from "react";
 import { HoverCard } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn, stagger } from "@/lib/utils";
 import { EmptyState, Skeleton } from "./states";
 
 export type RecordColumn<T> = {
@@ -129,10 +129,11 @@ export function RecordsTable<T>({
                     ))}
                   </tr>
                 ))
-              : records.map((record) => (
+              : records.map((record, index) => (
                   <tr
-                    className="group/row cursor-pointer border-b border-line transition-colors duration-150 ease-kit last:border-0 hover:bg-row-hover has-[[aria-current=true]]:bg-row-selected"
+                    className="group/row cursor-pointer border-b border-line transition-colors duration-150 ease-kit last:border-0 hover:bg-row-hover has-[[aria-current=true]]:bg-row-selected motion-safe:animate-kit-stagger"
                     key={getRowKey(record)}
+                    style={stagger(index)}
                     onClick={openRow}
                   >
                     {columns.map((column) => (
@@ -160,10 +161,11 @@ export function RecordsTable<T>({
                 <Skeleton className="h-3 w-56" />
               </li>
             ))
-          : records.map((record) => (
+          : records.map((record, index) => (
               <li
-                className="min-w-0 cursor-pointer px-4 py-3.5 transition-colors duration-150 ease-kit active:bg-row-hover has-[[aria-current=true]]:bg-row-selected has-[[aria-current=true]]:shadow-[inset_2px_0_0_var(--brand)]"
+                className="min-w-0 cursor-pointer px-4 py-3.5 transition-colors duration-150 ease-kit active:bg-row-hover has-[[aria-current=true]]:bg-row-selected has-[[aria-current=true]]:shadow-[inset_2px_0_0_var(--brand)] motion-safe:animate-kit-stagger"
                 key={getRowKey(record)}
+                style={stagger(index)}
                 onClick={openRow}
               >
                 <div className="flex min-w-0 items-start justify-between gap-3">

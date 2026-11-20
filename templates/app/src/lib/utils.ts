@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { clsx, type ClassValue } from "clsx";
 import { extendTailwindMerge } from "tailwind-merge";
 
@@ -26,4 +27,12 @@ const twMerge = extendTailwindMerge({
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+/**
+ * Staggers a list's rows as a view opens: pair `style={stagger(index)}` with
+ * `motion-safe:animate-kit-stagger`. Rows past the tenth wait no longer.
+ */
+export function stagger(index: number): CSSProperties {
+  return { "--kit-i": index } as CSSProperties;
 }

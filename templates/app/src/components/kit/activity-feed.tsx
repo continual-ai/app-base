@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { stagger } from "@/lib/utils";
 import { AgentMark } from "./agent";
 import { formatWhen } from "./format";
 import { KitIcon } from "./icons";
@@ -20,8 +21,12 @@ export function ActivityFeed({
         {title}
       </h2>
       <ol className="relative px-5 py-4 before:absolute before:top-6 before:bottom-6 before:left-[23px] before:w-px before:bg-line">
-        {items.map(({ text, onOpen }) => (
-          <li className="relative py-1.5 pl-6 text-small" key={text}>
+        {items.map(({ text, onOpen }, index) => (
+          <li
+            className="relative py-1.5 pl-6 text-small motion-safe:animate-kit-stagger"
+            key={text}
+            style={stagger(index)}
+          >
             <span
               aria-hidden="true"
               className={
@@ -85,8 +90,9 @@ export function ChangeList({
       <ul className="divide-y divide-line">
         {items.map(({ what, detail, by, at, agent, onOpen, onUndo }, index) => (
           <li
-            className="flex items-center gap-3 px-4 py-2.5 text-small motion-safe:animate-kit-enter"
+            className="flex items-center gap-3 px-4 py-2.5 text-small motion-safe:animate-kit-stagger"
             key={`${at}-${index}`}
+            style={stagger(index)}
           >
             {agent ? (
               <span className="flex size-7 shrink-0 items-center justify-center rounded-lg shadow-surface">

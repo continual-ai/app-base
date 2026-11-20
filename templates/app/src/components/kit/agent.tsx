@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn, stagger } from "@/lib/utils";
 import { KitIcon } from "./icons";
 
 /**
@@ -103,7 +103,8 @@ export function AgentTrail({
         {steps.map((step, index) => (
           <li
             key={index}
-            className="relative grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-2.5"
+            className="relative grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-2.5 motion-safe:animate-kit-stagger"
+            style={stagger(index)}
           >
             {index < steps.length - 1 ? (
               <span

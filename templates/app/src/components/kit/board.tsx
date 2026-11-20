@@ -1,5 +1,5 @@
 import type { Key, ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn, stagger } from "@/lib/utils";
 import { Avatar } from "./people";
 import { StatusPill } from "./status-pill";
 import { toneDot, type Tone } from "./tones";
@@ -58,8 +58,14 @@ export function BoardView<T>({
             </header>
             {column.records.length ? (
               <ul className="grid gap-1.5">
-                {column.records.map((record) => (
-                  <li key={getRowKey(record)}>{renderCard(record)}</li>
+                {column.records.map((record, index) => (
+                  <li
+                    className="motion-safe:animate-kit-stagger"
+                    key={getRowKey(record)}
+                    style={stagger(index)}
+                  >
+                    {renderCard(record)}
+                  </li>
                 ))}
               </ul>
             ) : (
@@ -100,7 +106,7 @@ export function BoardCard({
   return (
     <button
       aria-current={selected ? "true" : undefined}
-      className="group block w-full rounded-xl bg-card p-3 text-left shadow-surface transition-[box-shadow,transform] duration-150 ease-kit hover:shadow-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=true]:ring-2 aria-[current=true]:ring-brand motion-reduce:hover:translate-y-0"
+      className="group block w-full rounded-xl bg-card p-3 text-left shadow-surface transition-[box-shadow,transform] duration-150 ease-kit hover:-translate-y-px hover:shadow-surface-hover active:translate-y-0 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=true]:ring-2 aria-[current=true]:ring-brand motion-reduce:hover:translate-y-0"
       data-record-open=""
       onClick={onOpen}
       type="button"

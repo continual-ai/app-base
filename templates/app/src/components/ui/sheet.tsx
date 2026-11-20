@@ -20,15 +20,15 @@ function SheetContent({
     <Dialog.Portal>
       <Dialog.Overlay
         data-slot="sheet-overlay"
-        className="fixed inset-0 z-50 bg-black/30"
+        className="fixed inset-0 z-50 bg-black/20 backdrop-blur-[2px] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0"
       />
       <Dialog.Content
         data-slot="sheet-content"
         className={cn(
-          "fixed inset-y-0 z-50 flex w-80 max-w-[calc(100%-2rem)] flex-col gap-4 overflow-y-auto bg-background p-4 text-foreground shadow-raised outline-none",
+          "glass fixed inset-y-0 z-50 flex w-80 max-w-[calc(100%-2rem)] flex-col gap-4 overflow-y-auto p-4 text-foreground outline-none ease-kit data-[state=closed]:animate-out data-[state=closed]:duration-200 data-[state=open]:animate-in data-[state=open]:duration-300",
           side === "left"
-            ? "left-0 border-r border-line"
-            : "right-0 border-l border-line",
+            ? "left-0 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left"
+            : "right-0 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right",
           className,
         )}
         {...props}

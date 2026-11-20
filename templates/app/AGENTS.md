@@ -104,7 +104,9 @@ Run `pnpm run kit:check` before calling a screen done; `pnpm check` runs it too.
 - Weight 500 (`font-medium`) is the only emphasis; 600 only on avatars and marks; never bold.
   Figures get `tabular-nums`; number columns set `align: "end"`.
 - Never add custom shadows or borders around cards: `shadow-surface` for cards and fields,
-  `shadow-raised` for menus, sheets and toasts, `border-line` only to divide inside a card.
+  `shadow-raised` for menus, `border-line` only to divide inside a card.
+- Glass (`glass`) only for what floats over the App: toasts, sheets and popovers. Never on cards,
+  tables or anything people read at length. Sheets and toasts already use it.
 - Radii: `rounded-sm` for chips and keys, `rounded-md` for controls, `rounded-xl` for cards,
   `rounded-3xl` for trays.
 - One accent per App, used sparingly: the selected item, counts, links and the first chart series.
@@ -112,7 +114,10 @@ Run `pnpm run kit:check` before calling a screen done; `pnpm check` runs it too.
   always show their label too.
 - An agent is always `AgentMark`, never a sparkle, robot or person's avatar.
 - Motion: `duration-150 ease-kit` for hover and press, `motion-safe:animate-kit-enter` for things
-  that appear; nothing loops except loading and a working agent's mark.
+  that appear, `motion-safe:animate-kit-stagger` with `style={stagger(index)}` for the rows of a
+  list as a view opens, `motion-safe:animate-kit-rise` for something floating into place. The
+  kit's lists, boards, trails, bars, sheets and toasts already move; nothing loops except loading
+  and a working agent's mark, and nothing makes people wait to act.
 
 ### Blocks
 
@@ -169,7 +174,7 @@ ones the App needs:
 - Empty: an `EmptyState` that says what is missing and offers the one action that helps.
 - Loading: `RecordsTable` and `KpiTiles` take `loading`; use `Skeleton` sized like the content.
 - Decisions: a `Toast` that says what happened, with Undo when it can be taken back.
-- Errors: a `Toast` in plain words, and the change put back.
+- Errors: a `Toast` in plain words with `"failed"` as its tone, and the change put back.
 
 ### Before calling an App ready
 

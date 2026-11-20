@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn, stagger } from "@/lib/utils";
 import { KitIcon } from "./icons";
 import { StatusPill } from "./status-pill";
 import type { Tone } from "./tones";
@@ -42,10 +42,14 @@ export function QueueList({
       aria-label={caption}
       className="divide-y overflow-hidden rounded-xl bg-card shadow-surface"
     >
-      {items.map((item) => {
+      {items.map((item, index) => {
         const selected = item.id === selectedId;
         return (
-          <li key={item.id}>
+          <li
+            className="motion-safe:animate-kit-stagger"
+            key={item.id}
+            style={stagger(index)}
+          >
             <button
               aria-current={selected ? "true" : undefined}
               className={cn(
