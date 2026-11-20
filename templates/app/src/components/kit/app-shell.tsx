@@ -128,21 +128,21 @@ function Navigation({
           </div>
         ))}
       </nav>
-      <div className="mt-3 flex min-w-0 items-center gap-2 px-2 py-2">
+      <div className="mt-3 grid gap-3 px-2 py-2">
+        <ThemePicker className="w-full [&>button]:flex-1" />
         {viewer ? (
-          <>
+          <div className="flex min-w-0 items-center gap-2">
             <span
               aria-hidden="true"
               className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-soft text-micro font-semibold text-brand-ink"
             >
               {initials(viewer.name)}
             </span>
-            <span className="min-w-0 flex-1 truncate text-small font-medium text-strong">
+            <span className="min-w-0 truncate text-small font-medium text-strong">
               {viewer.name}
             </span>
-          </>
+          </div>
         ) : null}
-        <ThemePicker className="ml-auto" />
       </div>
     </div>
   );
