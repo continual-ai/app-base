@@ -1,131 +1,575 @@
+/*
+ * The design system. Every primitive in `src/components/ui/` and every block in
+ * `src/components/kit/` reads only these tokens, so restyling an App means
+ * changing values here, not hunting through components. Keep the names; change
+ * the values for a brand. See "Design system" in AGENTS.md.
+ *
+ * Ink is black (white in dark mode) at fixed strengths: strong, foreground,
+ * soft, muted, faint. Edges are 0.5px hairlines drawn as shadows. One accent,
+ * `--brand`, marks selection, links, counts and the first chart series.
+ * Status tones never change with the accent.
+ */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-heading: var(--font-heading);
+  --font-heading: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-sans: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
+
   --color-background: var(--background);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Ink strengths beyond foreground and muted-foreground. */
+  --color-strong: var(--strong);
+  --color-soft: var(--soft);
+  --color-faint: var(--faint);
+  /* Layers: canvas behind the App, tray behind a card that holds a decision. */
+  --color-canvas: var(--canvas);
+  --color-tray: var(--tray);
+  --color-fill: var(--fill);
+  --color-line: var(--line);
+  --color-kbd: var(--kbd);
+
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --color-row-hover: var(--row-hover);
+  --color-row-selected: var(--row-selected);
+  --color-draft: var(--draft);
+  --color-draft-border: var(--draft-border);
+
+  --color-tone-red: var(--tone-red);
+  --color-tone-red-soft: var(--tone-red-soft);
+  --color-tone-red-dot: var(--tone-red-dot);
+  --color-tone-amber: var(--tone-amber);
+  --color-tone-amber-soft: var(--tone-amber-soft);
+  --color-tone-amber-dot: var(--tone-amber-dot);
+  --color-tone-green: var(--tone-green);
+  --color-tone-green-soft: var(--tone-green-soft);
+  --color-tone-green-dot: var(--tone-green-dot);
+  --color-tone-blue: var(--tone-blue);
+  --color-tone-blue-soft: var(--tone-blue-soft);
+  --color-tone-blue-dot: var(--tone-blue-dot);
+  --color-tone-violet: var(--tone-violet);
+  --color-tone-violet-soft: var(--tone-violet-soft);
+  --color-tone-violet-dot: var(--tone-violet-dot);
+  --color-tone-gray: var(--tone-gray);
+  --color-tone-gray-soft: var(--tone-gray-soft);
+  --color-tone-gray-dot: var(--tone-gray-dot);
+
+  /* Radii: 5 for chips and keys, 7 for controls, 10 for cards, 12 for the App panel, 16 for trays. */
+  --radius-xs: 4px;
+  --radius-sm: 5px;
+  --radius-md: 6px;
+  --radius-lg: 7px;
+  --radius-xl: 10px;
+  --radius-2xl: 12px;
+  --radius-3xl: 16px;
+  --radius-4xl: 20px;
+
+  /* Depth: a hairline plus a soft lift. `shadow-surface` for cards and fields, `shadow-raised` for menus, sheets and toasts. */
+  --shadow-surface: var(--surface-shadow);
+  --shadow-surface-hover: var(--surface-shadow-hover);
+  --shadow-raised: var(--raised-shadow);
+  --shadow-panel: var(--panel-shadow);
+}
+
+/*
+ * The type scale. Use these steps, never text-[Npx]. 13px carries almost
+ * everything; weight 500 is the only emphasis, besides 600 on avatars.
+ * micro 10, caption 12, small 13, body 13, title 15, heading 20, display 24, metric 28.
+ */
+@theme {
+  --text-micro: 0.625rem;
+  --text-micro--line-height: 0.875rem;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.25rem;
+  --text-body: 0.8125rem;
+  --text-body--line-height: 1.25rem;
+  --text-title: 0.9375rem;
+  --text-title--line-height: 1.5rem;
+  --text-title--letter-spacing: -0.006em;
+  --text-heading: 1.25rem;
+  --text-heading--line-height: 1.75rem;
+  --text-heading--letter-spacing: -0.012em;
+  --text-display: 1.5rem;
+  --text-display--line-height: 2rem;
+  --text-display--letter-spacing: -0.018em;
+  --text-metric: 1.75rem;
+  --text-metric--line-height: 2.25rem;
+  --text-metric--letter-spacing: -0.022em;
+
+  /*
+   * Motion: 120ms for presses and hovers, 160ms for fades, 220ms for things
+   * that enter or glide, about 300ms for panels. Everything eases out, so it
+   * answers at once and settles. Reduced motion keeps only color changes.
+   */
+  --ease-kit: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-kit-enter: kit-enter 220ms var(--ease-kit) both;
+  /* Something floating up into place, such as a toast. */
+  --animate-kit-rise: kit-rise 280ms var(--ease-kit) both;
+  /* A bar growing from its start, once, when it first appears. */
+  --animate-kit-grow: kit-grow 560ms var(--ease-kit) both;
+  --animate-kit-shimmer: kit-shimmer 2.2s linear infinite;
+  --animate-kit-pulse: kit-pulse 1.6s ease-in-out infinite;
+
+  @keyframes kit-enter {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+  @keyframes kit-rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+    }
+  }
+  @keyframes kit-grow {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes kit-shimmer {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: 0 0;
+    }
+  }
+  @keyframes kit-pulse {
+    50% {
+      opacity: 0.35;
+    }
+  }
 }
 
 :root {
-  --font-sans: "Geist Variable", sans-serif;
-  --font-heading: var(--font-sans);
-  --font-mono: "Geist Mono Variable", monospace;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --font-sans:
+    "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --radius: 7px;
+
+  --canvas: #f4f4f3;
+  --background: #fbfbfb;
+  --card: #ffffff;
+  --popover: #ffffff;
+  --tray: #efefee;
+
+  --strong: #000000;
+  --foreground: rgb(0 0 0 / 0.87);
+  --soft: rgb(0 0 0 / 0.6);
+  --muted-foreground: rgb(0 0 0 / 0.46);
+  --faint: rgb(0 0 0 / 0.28);
+  --card-foreground: var(--foreground);
+  --popover-foreground: var(--foreground);
+
+  --primary: rgb(0 0 0 / 0.87);
+  --primary-foreground: #fbfbfb;
+  --secondary: rgb(0 0 0 / 0.06);
+  --secondary-foreground: var(--strong);
+  --muted: rgb(0 0 0 / 0.03);
+  --accent: rgb(0 0 0 / 0.05);
+  --accent-foreground: var(--strong);
+  --fill: rgb(0 0 0 / 0.06);
+  --kbd: rgb(0 0 0 / 0.055);
+  --destructive: #c43218;
+
+  --line: rgb(0 0 0 / 0.065);
+  --border: rgb(0 0 0 / 0.085);
+  --input: rgb(0 0 0 / 0.13);
+
+  /* The accent. Set data-accent on <html> to pick one of the presets below. */
+  --brand: #3e63dd;
+  --brand-hover: #3657c8;
+  --brand-foreground: #ffffff;
+  --brand-ink: #3451c2;
+  --brand-soft: #edf1fd;
+  --row-hover: rgb(0 0 0 / 0.025);
+  --row-selected: rgb(0 0 0 / 0.045);
+  --draft: #ffffff;
+  --draft-border: rgb(0 0 0 / 0.085);
+  --ring: rgb(62 99 221 / 0.65);
+
+  /* Status tones: text, soft background and solid dot. Text clears 4.5:1 on its soft. */
+  --tone-red: #c43218;
+  --tone-red-soft: rgb(239 68 56 / 0.1);
+  --tone-red-dot: #ee4b3d;
+  --tone-amber: #a65a00;
+  --tone-amber-soft: rgb(243 140 40 / 0.13);
+  --tone-amber-dot: #f18a2a;
+  --tone-green: #1d7f4a;
+  --tone-green-soft: rgb(80 190 128 / 0.15);
+  --tone-green-dot: #4cbf7f;
+  --tone-blue: #0a69cc;
+  --tone-blue-soft: rgb(10 132 255 / 0.1);
+  --tone-blue-dot: #1a8cff;
+  --tone-violet: #7d36cc;
+  --tone-violet-soft: rgb(160 84 235 / 0.11);
+  --tone-violet-dot: #a054eb;
+  --tone-gray: rgb(0 0 0 / 0.6);
+  --tone-gray-soft: rgb(0 0 0 / 0.06);
+  --tone-gray-dot: rgb(0 0 0 / 0.28);
+
+  /* Chart series, in this order: blue, orange, aqua, yellow, magenta (CVD-checked). */
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-red: #e34948;
+  --chart-gray: rgb(0 0 0 / 0.22);
+  --chart-grid: rgb(0 0 0 / 0.06);
+
+  --surface-shadow:
+    0 0 0 0.5px rgb(0 0 0 / 0.07), 0 1px 1px -1px rgb(0 0 0 / 0.1),
+    0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --surface-shadow-hover:
+    0 0 0 0.5px rgb(0 0 0 / 0.11), 0 1px 1px -1px rgb(0 0 0 / 0.12),
+    0 2px 4px 0 rgb(0 0 0 / 0.07);
+  --raised-shadow:
+    0 0 0 0.5px rgb(0 0 0 / 0.08), 0 10px 28px -8px rgb(0 0 0 / 0.16),
+    0 2px 6px -2px rgb(0 0 0 / 0.06);
+
+  /* Glass, only for what floats over the App: toasts, sheets, the phone bar. */
+  --glass: rgb(255 255 255 / 0.72);
+  --glass-edge: rgb(0 0 0 / 0.08);
+  --glass-highlight: rgb(255 255 255 / 0.7);
+  --panel-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.06), 0 1px 0 rgb(0 0 0 / 0.03),
+    0 2px 2px -1px rgb(0 0 0 / 0.04);
+
+  --sidebar: var(--canvas);
+  --sidebar-foreground: var(--soft);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: rgb(0 0 0 / 0.055);
+  --sidebar-accent-foreground: var(--strong);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--ring);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  color-scheme: dark;
+  --canvas: #0c0c0d;
+  --background: #131314;
+  --card: #1c1c1e;
+  --popover: #202023;
+  --tray: #111112;
+
+  --strong: #ffffff;
+  --foreground: rgb(255 255 255 / 0.9);
+  --soft: rgb(255 255 255 / 0.63);
+  --muted-foreground: rgb(255 255 255 / 0.47);
+  --faint: rgb(255 255 255 / 0.3);
+
+  --primary: rgb(255 255 255 / 0.9);
+  --primary-foreground: #161618;
+  --secondary: rgb(255 255 255 / 0.08);
+  --muted: rgb(255 255 255 / 0.04);
+  --accent: rgb(255 255 255 / 0.07);
+  --fill: rgb(255 255 255 / 0.08);
+  --kbd: rgb(255 255 255 / 0.08);
+  --destructive: #ff8a78;
+
+  --line: rgb(255 255 255 / 0.08);
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.2);
+
+  --brand: #4a6ee6;
+  --brand-hover: #5a7cec;
+  --brand-ink: #a5b6ff;
+  --brand-soft: rgb(84 114 228 / 0.16);
+  --row-hover: rgb(255 255 255 / 0.03);
+  --row-selected: rgb(255 255 255 / 0.06);
+  --draft: #1c1c1e;
+  --draft-border: rgb(255 255 255 / 0.1);
+  --ring: rgb(84 114 228 / 0.8);
+
+  --tone-red: #ff8a78;
+  --tone-red-soft: rgb(255 107 92 / 0.14);
+  --tone-red-dot: #ff6a5c;
+  --tone-amber: #ffb45e;
+  --tone-amber-soft: rgb(242 160 90 / 0.15);
+  --tone-amber-dot: #f2a05a;
+  --tone-green: #7fd0a0;
+  --tone-green-soft: rgb(125 208 160 / 0.14);
+  --tone-green-dot: #6cc893;
+  --tone-blue: #58b2ff;
+  --tone-blue-soft: rgb(88 178 255 / 0.15);
+  --tone-blue-dot: #4fadff;
+  --tone-violet: #c4a0f5;
+  --tone-violet-soft: rgb(185 140 240 / 0.16);
+  --tone-violet-dot: #b88cf0;
+  --tone-gray: rgb(255 255 255 / 0.63);
+  --tone-gray-soft: rgb(255 255 255 / 0.08);
+  --tone-gray-dot: rgb(255 255 255 / 0.32);
+
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-red: #e66767;
+  --chart-gray: rgb(255 255 255 / 0.25);
+  --chart-grid: rgb(255 255 255 / 0.07);
+
+  --surface-shadow:
+    0 0 0 0.5px rgb(255 255 255 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --surface-shadow-hover:
+    0 0 0 0.5px rgb(255 255 255 / 0.16), 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --raised-shadow:
+    0 0 0 0.5px rgb(255 255 255 / 0.12), 0 12px 32px -8px rgb(0 0 0 / 0.6);
+
+  --glass: rgb(32 32 35 / 0.68);
+  --glass-edge: rgb(255 255 255 / 0.1);
+  --glass-highlight: rgb(255 255 255 / 0.07);
+  --panel-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 0 rgb(0 0 0 / 0.45),
+    0 2px 1px -1px rgb(0 0 0 / 0.5);
+
+  --sidebar-accent: rgb(255 255 255 / 0.07);
+}
+
+/*
+ * Accents: each App wears its company's color. Set `data-accent` on <html> to
+ * one of these (useAccent does it). Each is checked for 4.5:1 text on its
+ * solid and its ink on white, in light and dark. Charts keep their own palette.
+ */
+
+[data-accent="indigo"] {
+  --brand: #3e63dd;
+  --brand-hover: #3657c8;
+  --brand-foreground: #ffffff;
+  --brand-ink: #3451c2;
+  --brand-soft: #edf1fd;
+  --ring: rgb(62 99 221 / 0.65);
+}
+
+[data-accent="blue"] {
+  --brand: #1f6feb;
+  --brand-hover: #1a62d4;
+  --brand-foreground: #ffffff;
+  --brand-ink: #1a5fc8;
+  --brand-soft: #e9f2fe;
+  --ring: rgb(31 111 235 / 0.65);
+}
+
+[data-accent="teal"] {
+  --brand: #0d7f73;
+  --brand-hover: #0b7065;
+  --brand-foreground: #ffffff;
+  --brand-ink: #0b6c62;
+  --brand-soft: #e2f5f2;
+  --ring: rgb(13 127 115 / 0.65);
+}
+
+[data-accent="green"] {
+  --brand: #1d7f45;
+  --brand-hover: #18703c;
+  --brand-foreground: #ffffff;
+  --brand-ink: #18703c;
+  --brand-soft: #e5f5ea;
+  --ring: rgb(29 127 69 / 0.65);
+}
+
+[data-accent="amber"] {
+  --brand: #f0a30a;
+  --brand-hover: #e09500;
+  --brand-foreground: #211500;
+  --brand-ink: #8a5800;
+  --brand-soft: #fdf3d9;
+  --ring: rgb(200 130 0 / 0.65);
+}
+
+[data-accent="orange"] {
+  --brand: #c84a14;
+  --brand-hover: #b44312;
+  --brand-foreground: #ffffff;
+  --brand-ink: #b44312;
+  --brand-soft: #fdeee6;
+  --ring: rgb(200 74 20 / 0.65);
+}
+
+[data-accent="rose"] {
+  --brand: #dc2f55;
+  --brand-hover: #c7254a;
+  --brand-foreground: #ffffff;
+  --brand-ink: #be1f45;
+  --brand-soft: #fdecf0;
+  --ring: rgb(220 47 85 / 0.65);
+}
+
+[data-accent="violet"] {
+  --brand: #7645d9;
+  --brand-hover: #6a3bc9;
+  --brand-foreground: #ffffff;
+  --brand-ink: #6538c2;
+  --brand-soft: #f2edfd;
+  --ring: rgb(118 69 217 / 0.65);
+}
+
+.dark[data-accent="indigo"],
+.dark [data-accent="indigo"] {
+  --brand: #4a6ee6;
+  --brand-hover: #5a7cec;
+  --brand-ink: #a5b6ff;
+  --brand-soft: rgb(84 114 228 / 0.16);
+  --ring: rgb(84 114 228 / 0.8);
+}
+
+.dark[data-accent="blue"],
+.dark [data-accent="blue"] {
+  --brand: #1f6feb;
+  --brand-hover: #3580f0;
+  --brand-ink: #9ec5ff;
+  --brand-soft: rgb(47 123 240 / 0.16);
+  --ring: rgb(47 123 240 / 0.8);
+}
+
+.dark[data-accent="teal"],
+.dark [data-accent="teal"] {
+  --brand: #0d7f73;
+  --brand-hover: #11907f;
+  --brand-ink: #6fdccb;
+  --brand-soft: rgb(20 160 144 / 0.16);
+  --ring: rgb(20 160 144 / 0.8);
+}
+
+.dark[data-accent="green"],
+.dark [data-accent="green"] {
+  --brand: #1d7f45;
+  --brand-hover: #23904f;
+  --brand-ink: #7fdca0;
+  --brand-soft: rgb(44 157 91 / 0.16);
+  --ring: rgb(44 157 91 / 0.8);
+}
+
+.dark[data-accent="amber"],
+.dark [data-accent="amber"] {
+  --brand: #f0a30a;
+  --brand-hover: #f5b234;
+  --brand-ink: #f7c76a;
+  --brand-soft: rgb(240 163 10 / 0.16);
+  --ring: rgb(240 163 10 / 0.8);
+}
+
+.dark[data-accent="orange"],
+.dark [data-accent="orange"] {
+  --brand: #c84a14;
+  --brand-hover: #d85a22;
+  --brand-ink: #ffab85;
+  --brand-soft: rgb(232 102 45 / 0.16);
+  --ring: rgb(232 102 45 / 0.8);
+}
+
+.dark[data-accent="rose"],
+.dark [data-accent="rose"] {
+  --brand: #dc2f55;
+  --brand-hover: #e5456a;
+  --brand-ink: #ff9fb4;
+  --brand-soft: rgb(232 73 108 / 0.16);
+  --ring: rgb(232 73 108 / 0.8);
+}
+
+.dark[data-accent="violet"],
+.dark [data-accent="violet"] {
+  --brand: #8352e0;
+  --brand-hover: #9163e8;
+  --brand-ink: #c7b1ff;
+  --brand-soft: rgb(139 92 240 / 0.16);
+  --ring: rgb(139 92 240 / 0.8);
+}
+
+/*
+ * Rows of a list as a view opens, one after another. Set --kit-i to the row's
+ * index (`stagger(index)`); rows after the tenth wait no longer. The delay is
+ * read on each row, so it cannot live in the theme.
+ */
+@utility animate-kit-stagger {
+  animation: kit-enter 260ms var(--ease-kit) both;
+  animation-delay: calc(min(var(--kit-i, 0), 10) * 28ms);
+}
+
+/*
+ * A frosted surface for something floating over the App. Where the browser
+ * cannot blur, it is the solid popover color instead.
+ */
+@utility glass {
+  background-color: var(--popover);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 0 0 0.5px var(--glass-edge),
+    var(--raised-shadow);
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: var(--glass);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    backdrop-filter: blur(20px) saturate(1.8);
+  }
 }
 
 @layer base {
+  /* Reduced motion: things appear in place; color changes stay. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 1ms !important;
+      animation-delay: 0ms !important;
+      animation-iteration-count: 1 !important;
+      transition-property:
+        color, background-color, border-color, opacity !important;
+    }
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
 
-  body {
-    @apply bg-background text-foreground;
-  }
-
   html {
     @apply font-sans;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  body {
+    @apply bg-background text-small text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }

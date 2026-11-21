@@ -9,10 +9,10 @@ Replace generic starter prose; preserve applicable technical constraints, includ
 registration, identity, database bindings, and build commands. Keep the guide current as the App
 evolves. Rewrite only the App-local copy; keep `templates/app/AGENTS.md` reusable for future Apps.
 
-Use TanStack Start/Router, React, TypeScript, Vite, and Tailwind v4. The starter includes Geist
-typography, semantic design tokens, source-owned UI primitives, and SDK preview hooks in the root
-route. It prescribes no navigation, database schema, business model, authentication UI, or sample
-data. `components.json` configures shadcn for extending the primitives.
+Use TanStack Start/Router, React, TypeScript, Vite, and Tailwind v4. The starter includes Inter
+typography, the design system's tokens, source-owned UI primitives, the design kit's blocks, and SDK
+preview hooks in the root route. It prescribes no navigation, database schema, business model,
+authentication UI, or sample data. `components.json` configures shadcn for extending the primitives.
 
 ## Commands
 
@@ -35,16 +35,19 @@ data. `components.json` configures shadcn for extending the primitives.
 
 Paths below are relative to `apps/<app-key>/`.
 
-| Concern                                    | File                                             |
-| ------------------------------------------ | ------------------------------------------------ |
-| Home page                                  | `src/routes/index.tsx`                           |
-| Document, metadata, favicon, preview hooks | `src/routes/__root.tsx`                          |
-| Liveness endpoint                          | `src/routes/api.health.ts`                       |
-| Router                                     | `src/router.tsx`                                 |
-| Global styles and tokens                   | `src/styles/global.css`, `src/styles/tokens.css` |
-| UI primitives and class helper             | `src/components/ui/`, `src/lib/utils.ts`         |
-| Static assets                              | `public/`                                        |
-| Framework and build configuration          | `vite.config.ts`                                 |
+| Concern                                     | File                                             |
+| ------------------------------------------- | ------------------------------------------------ |
+| Home page                                   | `src/routes/index.tsx`                           |
+| Document, metadata, favicon, preview hooks  | `src/routes/__root.tsx`                          |
+| Light and dark, and the person's choice     | `src/lib/theme.ts`                               |
+| Liveness endpoint                           | `src/routes/api.health.ts`                       |
+| Router                                      | `src/router.tsx`                                 |
+| Global styles and tokens                    | `src/styles/global.css`, `src/styles/tokens.css` |
+| UI primitives and class helper              | `src/components/ui/`, `src/lib/utils.ts`         |
+| Design kit blocks                           | `src/components/kit/`                            |
+| Operations from the browser, signed-in user | `src/lib/operations.ts`, `src/lib/use-viewer.ts` |
+| Static assets                               | `public/`                                        |
+| Framework and build configuration           | `vite.config.ts`                                 |
 
 ## UI
 
@@ -71,23 +74,131 @@ UI primitives support `className` and their element's normal props.
 <Button type="button" size="icon" aria-label="Close"><Icon name="close" /></Button>
 ```
 
-Reuse these icons when they fit; add only the missing icons the product needs.
-Use `bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, and
-`bg-primary text-primary-foreground` with the existing semantic tokens.
+Reuse these icons when they fit. For any other icon, import it from `lucide-react` (already a
+dependency) instead of drawing paths.
 Add further primitives when needed using the checked-in shadcn configuration.
 Design the main screen at 360px wide first, then widen. The page must never scroll sideways.
 Screens are checked at 360px: no sideways scroll, no primary list table showing less than 60%
 of its width on a phone, and no side rail below `lg`.
-Use `AppShell` from `@/components/blocks/app-shell` when an App needs a sidebar; never use a
-fixed sidebar below `lg`. Pass `appName`, `navigation`, and content as `children`.
-Use `ResponsiveRecords` from `@/components/blocks/responsive-records` for primary lists;
-pass `records`, `columns` (`id`, `header`, `cell(record)`), `getRowKey`, and a descriptive `caption`.
-It shares column renderers between stacked phone rows and a table at `md` and up.
-Use the plain `Table` only for secondary or wide reference data; it scrolls inside its container.
 Use `min-w-0` on flex and grid children holding text; wrap or truncate long values.
 
 Preserve accessible labels, keyboard interaction, visible focus, and contrast.
 Do not add a dashboard, generic CRUD framework, or business model by default.
+
+## Design system
+
+Every App shares one design system: tokens in `src/styles/tokens.css`, primitives in
+`src/components/ui/`, and blocks in `src/components/kit/` (import them from `@/components/kit`).
+It should feel calm, exact and quiet: gray canvas, white cards with hairline edges, one accent,
+13px type, and motion that confirms rather than performs.
+Run `pnpm run kit:check` before calling a screen done; `pnpm check` runs it too.
+
+### Rules
+
+- Compose screens from kit blocks and `ui/` primitives before writing new components.
+  New components reuse the same tokens and anatomy.
+- Never use raw colors (`#hex`, `rgb()`, `bg-[...]`, `text-red-500`): use the tokens' classes, such as
+  `bg-card`, `bg-canvas`, `bg-tray`, `text-strong`, `text-soft`, `text-muted-foreground`,
+  `border-line`, `bg-brand`, `text-brand-ink`, `bg-tone-red-soft text-tone-red`.
+- Never use `text-[Npx]` or Tailwind's `text-sm`-style sizes: use `text-caption` 12, `text-small` 13
+  (almost everything), `text-title` 15, `text-heading` 20, `text-display` 24 and `text-metric` 28;
+  `text-micro` 10 only inside avatars.
+- Weight 500 (`font-medium`) is the only emphasis; 600 only on avatars and marks; never bold.
+  Figures get `tabular-nums`; number columns set `align: "end"`.
+- Never add custom shadows or borders around cards: `shadow-surface` for cards and fields,
+  `shadow-raised` for menus, `border-line` only to divide inside a card.
+- Glass (`glass`) only for what floats over the App: toasts, sheets and popovers. Never on cards,
+  tables or anything people read at length. Sheets and toasts already use it.
+- Radii: `rounded-sm` for chips and keys, `rounded-md` for controls, `rounded-xl` for cards,
+  `rounded-3xl` for trays.
+- One accent per App, used sparingly: the selected item, counts, links and the first chart series.
+  The primary button is the dark `default` variant; status tones (red, amber, green, blue, gray)
+  always show their label too.
+- Light and dark come for free. `AppShell` and `AppHeader` show a `ThemePicker` (Automatic, Light,
+  Dark) beside the person signed in; keep it there. Automatic follows Continual inside Continual
+  and the device elsewhere (`src/lib/theme.ts`). Use the tokens, never `bg-white`, `text-black`
+  or hex colors, so both stay readable.
+- The App's mark is an icon for what it does, passed as `icon` to `AppShell` or `AppHeader`: a
+  `lucide-react` export such as `Receipt` for invoices, `Truck` for deliveries or `Megaphone` for
+  campaigns. Never the company's initial.
+- An agent is always `AgentMark`, never a sparkle, robot or person's avatar.
+- Motion: `duration-150 ease-kit` for hover and press, `motion-safe:animate-kit-enter` for things
+  that appear, `motion-safe:animate-kit-stagger` with `style={stagger(index)}` for the rows of a
+  list as a view opens, `motion-safe:animate-kit-rise` for something floating into place. The
+  kit's lists, boards, trails, bars, sheets and toasts already move; nothing loops except loading
+  and a working agent's mark, and nothing makes people wait to act.
+
+### Blocks
+
+| Block                                | Use it for                                                                |
+| ------------------------------------ | ------------------------------------------------------------------------- |
+| `AppShell`, `PanelHeader`            | The frame: sidebar sections on the canvas, the App on an inset panel      |
+| `AppHeader`, `BrandMark`             | A top bar instead, for a single-screen App                                |
+| `ThemePicker`                        | Light, dark or automatic; already in `AppShell` and `AppHeader`           |
+| `PageHeader`, `SectionHeader`        | A view's title and one line on its purpose; headings inside a view        |
+| `KpiTiles`                           | Two to four stat cards, each with a note, `trend` and optional `spark`    |
+| `TrendChart`, `Breakdown`, `Heatmap` | A line or bar trend; how a total splits; values by row and period         |
+| `FilterChips`                        | A segmented control of filters above a list, with `counts`                |
+| `RecordsTable`, `RecordName`         | The primary list; compact rows on phones; `RecordName` opens the record   |
+| `BoardView`, `BoardCard`             | Stages as columns of cards on trays                                       |
+| `QueueList`, `QueueProgress`         | A review queue with progress; `useQueueKeys` adds j, k and a              |
+| `DetailPanel`, `RecordDetail`        | The selected record: side panel on wide screens, sheet on phones          |
+| `DraftCard`, `Tray`, `Kbd`           | Anything prepared for review, on a tray, with Approve (⌘↵), Edit and Skip |
+| `AgentMark`, `AgentTrail`            | An agent, and the steps it took toward one goal                           |
+| `ActivityFeed`, `ChangeList`         | What the last run did; what changed, with Undo on each change             |
+| `AutonomyDial`, `StepList`           | How much an agent does alone; an ordered ladder such as escalation steps  |
+| `StatusPill`, `Tone`                 | A record's status, one tone per status                                    |
+| `Avatar`, `Person`                   | People as initials on a tint picked from their name                       |
+| `RelativeDate`, `Delta`, `Sparkline` | "3 days ago" with the date on hover, signed changes, tiny trends          |
+| `EmptyState`, `Skeleton`, `Toast`    | Nothing to show yet, placeholders while loading, confirmations with Undo  |
+
+`useViewer` (`@/lib/use-viewer`) gives the signed-in person and `callOperation`
+(`@/lib/operations`) calls the App's operations from the browser.
+
+### Screens that fit agent work
+
+Most Apps track records while an agent works on them. Build from these screens, keeping only the
+ones the App needs:
+
+- **Overview**: `KpiTiles`, one chart (`TrendChart`, `Breakdown` or `Heatmap`), the records that
+  need attention, and what waits on the person.
+- **Needs you**: a `QueueList` of what the agent prepared, each opening an `AgentTrail` of how it got
+  there and a `DraftCard`; the next item opens after a decision.
+- **Records**: `FilterChips`, then `RecordsTable` (or `BoardView` for stages), with `RecordDetail` in
+  a `DetailPanel`.
+- **Run**: what the agent did on its last run (`ActivityFeed`) and what it changed (`ChangeList` with
+  Undo).
+- **Rules**: an `AutonomyDial` and a `StepList` of what the agent does at each step.
+
+### The company's color
+
+- Each App wears one accent: `indigo`, `blue`, `teal`, `green`, `amber`, `orange`, `rose` or
+  `violet`, set with `useAccent` (which puts `data-accent` on `<html>`).
+- Pick the accent closest to the company's brand color.
+  For an exact brand color, add one more `[data-accent="…"]` block in `tokens.css` with the same
+  variables, and check its text contrast is at least 4.5:1.
+- Charts keep their own palette (`chartColor`); status tones stay the same in every accent.
+
+### Every state
+
+- Empty: an `EmptyState` that says what is missing and offers the one action that helps.
+- Loading: `RecordsTable` and `KpiTiles` take `loading`; use `Skeleton` sized like the content.
+- Decisions: a `Toast` that says what happened, with Undo when it can be taken back.
+- Errors: a `Toast` in plain words with `"failed"` as its tone, and the change put back.
+
+### Before calling an App ready
+
+Look at it at 390px and 1440px wide, in light and dark, and check:
+
+- Nothing scrolls sideways or overlaps, and long names wrap instead of clipping.
+- Every control is at least 36px tall on phones, with a visible focus ring.
+- The view's title, its key numbers and its main action are obvious at a glance.
+- Empty, loading and error states read as designed, not as blank space.
+- `pnpm run kit:check` passes.
+
+Blocks are this App's own source; edit them freely for this App and write new components in the
+same style. Apps that are not about tracking records, such as a public page, a storefront or a
+calculator, still use the tokens and primitives, but design their screens for their purpose.
 
 ## Server boundary
 

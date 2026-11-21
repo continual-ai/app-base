@@ -6,6 +6,7 @@ import {
   createRootRoute,
 } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { THEME_SCRIPT } from "@/lib/theme";
 import "@/styles/global.css";
 
 export const Route = createRootRoute({
@@ -27,8 +28,10 @@ function Root() {
   }, []);
 
   return (
-    <html lang="en">
+    // The theme script puts `dark` on <html> before hydration.
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <HeadContent />
       </head>
       <body>
